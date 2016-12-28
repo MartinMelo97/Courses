@@ -233,10 +233,10 @@ Route::group(['prefix'=>'docentes'], function(){
 
 
 
-    Route::get('/{usuario}', [
+ /*   Route::get('/{usuario}', [
         'uses' => 'Docentes\DocenteController@show',
         'as' => 'docentes.perfil'
-    ]);
+    ]);*/
 
     Route::post('password/email', 'DocentesAuth\ForgotPasswordController@sendResetLinkEmail');
     Route::get('password/reset', 'DocentesAuth\ForgotPasswordController@showLinkRequestForm');
@@ -244,20 +244,26 @@ Route::group(['prefix'=>'docentes'], function(){
     Route::get('password/reset/{token}','DocentesAuth\ResetPasswordController@showResetForm');
 
     Route::group(['middleware'=>'docentes'], function(){
-        
-        Route::get('/dashboard', ['uses'=>'DocentesHomeController@index',
-        'as'=>'docentes.dashboard']);
 
-        Route::get('/perfil', [
-        'uses'=>'Docentes\DocenteController@profile',
-        'as'=>'docentes.perfil.own'
-    ]);
-
-        Route::get('/perfil/edit', [
+        Route::get('/perfil',[
             'uses'=>'Docentes\DocenteController@profile',
+            'as'=>'docentes.perfil.own'
+        ]);
+
+        Route::get('/{usuario}',[
+            'uses'=>'Docentes\DocenteController@show',
+            'as'=>'docentes.perfil'
+        ]);
+
+        Route::get('/perfil/edit',[
+            'uses'=>'Docentes\DocenteController@profileEdit',
             'as'=>'docentes.perfil.edit'
         ]);
 
+        Route::post('/perfil/edit',[
+            'uses'=>'Docentes\DocenteController@profileEditPOST',
+            'as'=>'docentes.perfil.edit'
+        ]);
     });
 });
 

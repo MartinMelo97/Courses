@@ -14,7 +14,6 @@
     <p>Grado de estudios: {{$docente->grado_estudio}}</p>
     <a href="{{route('instituciones.detail',$docente->institucion->slug)}}">
     <p>Institucion: {{$docente->institucion->nombre}}</p></a>
-    <p>Fecha de nacimiento: {{$alumno->fecha_nacimiento}}</p>
     @if(!$other)
         <h2>Cursos en los que estas como docente: </h2>
         @if(count($cursos)>0)

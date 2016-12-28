@@ -23,6 +23,6 @@ class DocentesHomeController extends Controller
      */
     public function index()
     {
-        return view('/docentes/profile');
+        return view('docentes.dashboard');
     }
 }

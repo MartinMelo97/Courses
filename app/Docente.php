@@ -19,7 +19,7 @@ class Docente extends User
     }
 
     public function cursos(){
-        return $this->belongsToMany('App\Cursos')->withTimestamps();
+        return $this->belongsToMany('App\Curso')->withTimestamps();
     }
     /**
      * Send the password reset notification.
