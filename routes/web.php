@@ -52,7 +52,10 @@ Route::get('password/reset/{token}','AlumnosAuth\ResetPasswordController@showRes
 
 
 Route::group(['middleware'=>'alumnos'], function() {
-    Route::get('dashboard', 'AlumnosHomeController@index');
+    Route::get('dashboard',[
+        'uses'=>'Alumnos\AlumnoController@dashboard',
+        'as'=>'alumnos.dashboard'
+    ]);
 
     Route::get('/profile', [
         'uses'=>'Alumnos\AlumnoController@profile',
@@ -61,6 +64,11 @@ Route::group(['middleware'=>'alumnos'], function() {
 
     Route::get('/profile/edit', [
         'uses'=>'Alumnos\AlumnoController@profileEdit',
+        'as'=>'alumnos.perfil.edit'
+    ]);
+
+    Route::post('/profile/edit', [
+        'uses'=>'Alumnos\AlumnoController@profileEditPOST',
         'as'=>'alumnos.perfil.edit'
     ]);
 
@@ -216,34 +224,39 @@ Route::group(['prefix'=>'docentes'], function(){
     Route::get('registro',[
         'uses'=>'DocentesAuth\RegisterController@showRegistrationForm',
         'as'=>'docentes.registro'
-    ]);
+    ])->middleware('auth');
 
     Route::post('registro',[
         'uses'=>'DocentesAuth\RegisterController@register',
         'as'=>'docentes.registro'
-    ]);
+    ])->middleware('auth');
 
+
+
+    Route::get('/{usuario}', [
+        'uses' => 'Docentes\DocenteController@show',
+        'as' => 'docentes.perfil'
+    ]);
 
     Route::post('password/email', 'DocentesAuth\ForgotPasswordController@sendResetLinkEmail');
     Route::get('password/reset', 'DocentesAuth\ForgotPasswordController@showLinkRequestForm');
     Route::post('password/reset', 'DocentesAuth\ResetPasswordController@reset');
     Route::get('password/reset/{token}','DocentesAuth\ResetPasswordController@showResetForm');
 
-    Route::get('/{usuario}', [
-        'uses' => 'DocentesControllers\PerfilController@show',
-        'as' => 'docentes.perfil'
+    Route::group(['middleware'=>'docentes'], function(){
+        
+        Route::get('/dashboard', ['uses'=>'DocentesHomeController@index',
+        'as'=>'docentes.dashboard']);
+
+        Route::get('/perfil', [
+        'uses'=>'Docentes\DocenteController@profile',
+        'as'=>'docentes.perfil.own'
     ]);
 
-    Route::group(['middleware'=>'docentes'], function(){
-        Route::get('/dashboard', 'DocentesHomeController@index');
-
-        Route::get('/perfil', function(){
-            return "Mi perfil de profe";
-        });
-
-        Route::get('/perfil/edit', function(){
-            return "Editando mi perfil de profe";
-        });
+        Route::get('/perfil/edit', [
+            'uses'=>'Docentes\DocenteController@profile',
+            'as'=>'docentes.perfil.edit'
+        ]);
 
     });
 });

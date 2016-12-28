@@ -49,6 +49,10 @@ class LoginController extends Controller
         return view('docentes.auth.login');
     } 
 
+    public function username()
+    {
+        return 'usuario';
+    }
     public function logout(Request $request)
     {
         $this->guard()->logout();

@@ -23,6 +23,6 @@ class AlumnosHomeController extends Controller
      */
     public function index()
     {
-        return view('/alumnos/home');
+        return view('/alumnos/dashboard');
     }
 }

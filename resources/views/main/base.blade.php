@@ -17,6 +17,8 @@
             <ul style="display: inline-block;">
                 @if(\Auth::guard('alumnos')->user())
                     @include('main.nav_alumnos')
+                @elseif(\Auth::guard('docentes')->user())
+                    @include('main.nav_docentes')
                 @else
                 <a href="{{route ('alumnos.login')}}"><li>Iniciar sesion</li></a>
                 <a href="{{route ('alumnos.registro')}}"><li>Registro</li></a>

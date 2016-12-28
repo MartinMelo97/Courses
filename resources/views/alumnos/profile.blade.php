@@ -3,11 +3,11 @@
  Perfil {{$alumno->nombre}} {{$alumno->apellidos}}
 @endsection
 @section('content')
-    <h1>Bienvenido a tu perfil {{$alumno->nombre}} {{$alumno->apellidos}}</h1>
     @if(!$other)
-        <a href="{{route ('alumnos.perfil.edit',$alumno->usuario)}}"><h3 style="color:red;">Editar perfil</h3></a>
+        <h1>Bienvenido a tu perfil {{$alumno->nombre}} {{$alumno->apellidos}}</h1>
+        <a href="{{route ('alumnos.perfil.edit')}}"><h3 style="color:red;">Editar perfil</h3></a>
+        <h3>Tu informacion: </h3>
     @endif
-    <h3>Tu informacion: </h3>
     <p>Nombre: {{$alumno->nombre}}</p>
     <p>Apellidos: {{$alumno->apellidos}}</p>
     <p>Usuario: {{$alumno->usuario}}</p>
