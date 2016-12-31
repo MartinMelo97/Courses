@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\AdminControllers;
 
 use Illuminate\Http\Request;
-
+use App\Http\Controllers\Controller;
 class DocentesController extends Controller
 {
     public function index(){

@@ -49,6 +49,6 @@ class AlumnoController extends Controller
             $alumno->imagen = $some;
             $alumno->save();
             return redirect()->route('alumnos.perfil.own');
-        
+       
     }
 }

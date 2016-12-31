@@ -78,47 +78,47 @@ Route::group(['middleware'=>'alumnos'], function() {
 //Rutas de administrador
 Route::group(['prefix' => 'admin'], function() {
     Auth::Routes();
-    
     Route::group(['middleware'=>'auth'], function(){
-        Route::get('/dashboard', 'HomeController@index');
-        
-        Route::resource('cursos', 'CursosController');
+        Route::get('/dashboard', [
+            'uses'=>'HomeController@index',
+            'as'=>'admin.dashboard'
+        ]);
+        Route::resource('cursos', 'AdminControllers\CursosController');
         Route::get('cursos/{id}/destroy',[
-            'uses'=>'AdminControllers/CursosController@destroy',
-            'as'=>'admin.cursos.destroy'
+            'uses'=>'AdminControllers\CursosController@destroy',
+            'as'=>'cursos.destroy'
         ]);
 
-        Route::resource('categorias', 'CategoriasController');
+        Route::resource('categorias', 'AdminControllers\CategoriasController');
         Route::get('categorias/{id}/destroy',[
-            'uses'=>'AdminControllers/CategoriasController@destroy',
-            'as'=>'admin.categorias.destroy'
+            'uses'=>'AdminControllers\CategoriasController@destroy',
+            'as'=>'categorias.destroy'
         ]);
 
-        Route::resource('instituciones', 'InstitucionesController');
+        Route::resource('instituciones', 'AdminControllers\InstitucionesController');
         Route::get('instituciones/{id}/destroy',[
-            'uses'=>'AdminControllers/InstitucionesController@destroy',
-            'as'=>'admin.instituciones.destroy'
+            'uses'=>'AdminControllers\InstitucionesController@destroy',
+            'as'=>'instituciones.destroy'
         ]);
         
-        Route::resource('alumnos', 'AlumnosController');
+        Route::resource('alumnos', 'AdminControllers\AlumnosController');
         Route::get('alumnos/{id}/destroy',[
-            'uses'=>'AdminControllers/AlumnosController@destroy',
-            'as'=>'admin.alumnos.destroy'
+            'uses'=>'AdminControllers\AlumnosController@destroy',
+            'as'=>'alumnos.destroy'
         ]);
 
-        Route::resource('docentes', 'DocentesController');
+        Route::resource('docentes', 'AdminControllers\DocentesController');
         Route::get('docentes/{id}/destroy',[
-            'uses'=>'AdminControllers/DocentesController@destroy',
-            'as'=>'admin.docentes.destroy'
+            'uses'=>'AdminControllers\DocentesController@destroy',
+            'as'=>'docentes.destroy'
         ]);
 
-        Route::resource('tags', 'TagsController');
+        Route::resource('tags', 'AdminControllers\TagsController');
         Route::get('tags/{id}/destroy', [
-        'uses'=>'AdminControllers/TagsController@destroy',
-        'as'=>'admin.tags.destroy'
+        'uses'=>'AdminControllers\TagsController@destroy',
+        'as'=>'tags.destroy'
         ]);
     });
- 
 });
 
 //Rutas instituciones
