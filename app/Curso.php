@@ -12,7 +12,7 @@ class Curso extends Model
     use Sluggable;
 
     protected $table = 'cursos';
-    protected $fillable = ['nombre','duracion','fecha_inicio','lenguaje','nivel','gratis','descripcion','calificacion','slug'];
+    protected $fillable = ['nombre','duracion','fecha_inicio','lenguaje','nivel','membresia','descripcion','calificacion','media','slug'];
 
     public function docentes(){
         return $this->belongsToMany('App\Docente')->withTimestamps();
@@ -24,6 +24,14 @@ class Curso extends Model
 
     public function comentarios(){
        return $this->hasMany('App\Comentario');
+   }
+
+   public function ventajas(){
+       return $this->hasMany('App\Ventaja');
+   }
+
+   public function temarios(){
+       return $this->hasMany('App\Temario');
    }
    
     public function categorias(){
@@ -39,11 +47,11 @@ class Curso extends Model
     }
 
     public function tags(){
-        return $this->belongsToMany('App\Tag')->withTimestamps();
+        return $this->hasMany('App\Tag');
     }
 
     public function tags_slugs(){
-         return $this->belongsToMany('App\Tag')->withTimestamps();
+         return $this->hasMany('App\Tag');
     }
 
     public function sluggable(){

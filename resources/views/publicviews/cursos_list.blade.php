@@ -5,11 +5,12 @@
 @section('content')
     <h1>Cursos disponibles!</h1>
         @foreach($cursos as $curso)
+            <hr>
             <a href="{{route ('cursos.detail', $curso->slug)}}"><div style="background:white;">
-            <p>{{$curso->nombre}}</p>
-            <p>{{$curso->fecha_inicio}}</p>
-            <p>{{$curso->lenguaje}}</p>
-            <a href="{{route ('instituciones.detail',$curso->institucion->slug)}}"><p>{{$curso->institucion->nombre}}</p></a>
+            <p>Nombre: {{$curso->nombre}}</p>
+            <p>Inicia el: {{$curso->fecha_inicio}}</p>
+            <p>Membresia: {{$curso->membresia}}</p>
+            <a href="{{route ('instituciones.detail',$curso->institucion->slug)}}"><p>Institución: {{$curso->institucion->nombre}}</p></a>
             <h3>Categorias:</h3>
             <p>
             @for($i = 0; $i < count($curso->categorias); $i++)
@@ -24,7 +25,6 @@
             @endfor
             </p>
             </div></a>
-            <hr>
         @endforeach
         {!! $cursos->render() !!}
 @endsection

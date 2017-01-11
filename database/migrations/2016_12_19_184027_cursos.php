@@ -21,15 +21,18 @@ class Cursos extends Migration
             $table->date('fecha_inicio');
             $table->string('lenguaje');
             $table->enum('nivel',['facil','intermedio','alto'])->default('facil');
-            $table->boolean('gratis');
+            $table->enum('membresia',['gratuita','extraordinaria','premium'])->default('gratuita');
             $table->text('descripcion');
-            $table->integer('calificacion');
+            $table->integer('calificacion')->default(0);
+            $table->integer('visitas')->default(0);
+            $table->integer('clicks')->default(0);
+            $table->string('media')->nullable();
             $table->integer('institucion_id')->unsigned();
             $table->foreign('institucion_id')->references('id')->on('instituciones')->onDelete('cascade');
             $table->string('slug')->nullable();
             $table->timestamps();
         });
-        
+         
     }
 
     /**

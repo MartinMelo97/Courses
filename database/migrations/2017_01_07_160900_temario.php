@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Tags extends Migration
+class Temario extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,15 @@ class Tags extends Migration
      */
     public function up()
     {
-        Schema::create('tags', function (Blueprint $table) {
+        
+        Schema::create('temarios', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('nombre');
-            $table->string('slug')->nullable();
+            $table->text('tema');
+            $table->integer('curso_id')->unsigned();
+            $table->foreign('curso_id')->references('id')->on('cursos')->onDelete('cascade');
             $table->timestamps();
         });
+        
     }
 
     /**
@@ -29,7 +32,7 @@ class Tags extends Migration
     public function down()
     {
         
-        Schema::drop('tags');
+        Schema::drop('temarios');
         
     }
 }

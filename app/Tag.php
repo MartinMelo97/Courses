@@ -13,7 +13,7 @@ class Tag extends Model
     protected $fillabe = ["nombre"];
 
     public function cursos(){
-        return $this->belongsToMany('App\Curso')->withTimestamps();
+        return $this->belongsTo('App\Curso'); 
     }
 
     public function sluggable(){

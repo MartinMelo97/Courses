@@ -18,7 +18,19 @@ class Instituciones extends Migration
             $table->increments('id');
             $table->string('nombre',140);
             $table->string('email',140)->unique();
-            $table->string('imagen');
+            $table->string('telefono')->unique();
+            $table->string('codigo_postal');
+            $table->string('pais');
+            $table->string('estado');
+            $table->string('municipio');
+            $table->string('direccion');
+            $table->string('latitud')->nullable();
+            $table->string('longitud')->nullable();
+            $table->string('facebook')->nullable();
+            $table->string('twitter')->nullable();
+            $table->string('google')->nullable();
+            $table->string('pagina_web')->nullable();
+            $table->string('imagen')->nullable();
             $table->string('slug')->nullable();
             $table->timestamps();
             

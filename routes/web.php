@@ -11,11 +11,13 @@
 |
 */
 
+//Pagina principal
 Route::get('/', [
     'uses'=>'MainController@index',
     'as'=>'main'
 ]);
 
+//Login  y logout para usuarios
 Route::get('/login',[
     'uses'=>'AlumnosAuth\LoginController@showLoginForm',
     'as'=>'alumnos.login']);
@@ -28,7 +30,7 @@ Route::post('/logout',[
     'uses'=>'AlumnosAuth\LoginController@logout',
     'as'=>'alumnos.logout']);
 
-
+//Registro de usuarios
 Route::get('/registro',[
     'uses'=>'AlumnosAuth\RegisterController@showRegistrationForm',
     'as'=>'alumnos.registro'
@@ -39,18 +41,19 @@ Route::post('registro',[
     'as'=>'alumnos.registro'
 ]);
 
+//Visualizar perfil de alumno
 Route::get('/alumnos/{usuario}',[
     'uses'=>'Alumnos\AlumnoController@show',
     'as'=>'alumnos.perfil'
 ]);    
 
-
+//Rutas para recuperacion de contraseña
 Route::post('password/email', 'AlumnosAuth\ForgotPasswordController@sendResetLinkEmail');
 Route::get('password/reset', 'AlumnosAuth\ForgotPasswordController@showLinkRequestForm');
 Route::post('password/reset', 'AlumnosAuth\ResetPasswordController@reset');
 Route::get('password/reset/{token}','AlumnosAuth\ResetPasswordController@showResetForm');
 
-
+//Rutas que solo puede acceder los alumnos
 Route::group(['middleware'=>'alumnos'], function() {
     Route::get('dashboard',[
         'uses'=>'Alumnos\AlumnoController@dashboard',
@@ -78,7 +81,8 @@ Route::group(['middleware'=>'alumnos'], function() {
 //Rutas de administrador
 Route::group(['prefix' => 'admin'], function() {
     Auth::Routes();
-    Route::group(['middleware'=>'auth'], function(){
+    
+    /*Route::group(['middleware'=>'auth'], function(){
         Route::get('/dashboard', [
             'uses'=>'HomeController@index',
             'as'=>'admin.dashboard'
@@ -118,21 +122,23 @@ Route::group(['prefix' => 'admin'], function() {
         'uses'=>'AdminControllers\TagsController@destroy',
         'as'=>'tags.destroy'
         ]);
-    });
+    });*/
 });
 
 //Rutas instituciones
 Route::group(['prefix' => 'instituciones'], function(){
+
+    //ListView de todas las instituciones vinculadas
     Route::get('/',[
         'uses'=>'InstitucionController@list',
         'as'=>'instituciones.list'
     ]);
-
+    //DetailView de una institucion
     Route::get('/{slug}', [
         'uses'=>'InstitucionController@detail',
         'as'=>'instituciones.detail'
     ]);
-
+    //LitView de todos los cursos ofertados por esa institucion
     Route::get('/{slug}/cursos',[
         'uses'=>'InstitucionController@courses',
         'as'=>'instituciones.courses'
@@ -141,26 +147,35 @@ Route::group(['prefix' => 'instituciones'], function(){
 
 //Rutas de cursos 
 Route::group(['prefix' => 'cursos'],function(){
+
+    //ListView de todos los cursos, ordenados por los filtrados dados
     Route::get('/',[
         'uses'=>'CursoController@list',
         'as'=>'cursos.list'
     ]);
-
+    
+    //DetailView de algun curso
     Route::get('/{slug}', [
         'uses'=>'CursoController@detail',
         'as'=>'cursos.detail'
+    ]);
+
+    //ListView de cursos con esa membresia
+    Route::get('/membresia/{membresia}',[
+        'uses'=>'CursoController@membresia',
+        'as'=>'cursos.membresia'
     ]);
 
 });
 
 //Rutas de categorias
 Route::group(['prefix' => 'categorias'], function() {
-    
+    //ListView de todas  las categorias
     Route::get('/',[
         'uses'=>'CategoriasController@list',
         'as'=>'categorias.list'
     ]);
-
+    //ListView de cursos que pertenezcan a alguna categoria
     Route::get('/{slug}/cursos',[
         'uses'=>'CategoriasController@detail',
         'as'=>'categorias.detail'
@@ -171,11 +186,13 @@ Route::group(['prefix' => 'categorias'], function() {
 //Rutas de tags
 Route::group(['prefix' => 'tags'], function() {
     
+    //ListView de todos los tags
     Route::get('/',[
         'uses'=>'TagController@list',
         'as'=>'tags.list'
     ]);
 
+    //ListView de los cursos que pertenezcan a esa categoria
     Route::get('/{slug}/cursos',[
         'uses'=>'TagController@detail',
         'as'=>'tags.detail'
@@ -183,31 +200,11 @@ Route::group(['prefix' => 'tags'], function() {
     
 });
 
-//Rutas relacionadas con alumnos
-Route::group(['prefix'=>'alumnos'], function(){
-
-    Route::group(['prefix'=>'curso'], function(){
-        Route::get('/{nombre}/contenido', function($nombre){
-            return "Contenido del curso";
-        });
-
-        Route::get('/{nombre}', function($nombre){
-            return "Lalal del curso";
-        });
-
-        Route::get('/{nombre}/progreso', function($nombre){
-            return 'Progreso en el curso';
-        });
-
-        Route::get('/{nombre}/foro', function($nombre){
-            return "Foro del curso";
-        });
-    });
-});
 
 //Rutas de docentes
 Route::group(['prefix'=>'docentes'], function(){
 
+    //login y logout para docentes
     Route::get('/login',[
     'uses'=>'DocentesAuth\LoginController@showLoginForm',
     'as'=>'docentes.login']);
@@ -220,7 +217,7 @@ Route::group(['prefix'=>'docentes'], function(){
         'uses'=>'DocentesAuth\LoginController@logout',
         'as'=>'docentes.logout']);
 
-
+    //registro de docentes, solo lo pueden hacer los administradores
     Route::get('registro',[
         'uses'=>'DocentesAuth\RegisterController@showRegistrationForm',
         'as'=>'docentes.registro'
@@ -232,12 +229,13 @@ Route::group(['prefix'=>'docentes'], function(){
     ])->middleware('auth');
 
 
-
+//Ruta para visualizar el perfil de algun docente
  /*   Route::get('/{usuario}', [
         'uses' => 'Docentes\DocenteController@show',
         'as' => 'docentes.perfil'
     ]);*/
 
+    //Recuperacion de contraseñas para docentes
     Route::post('password/email', 'DocentesAuth\ForgotPasswordController@sendResetLinkEmail');
     Route::get('password/reset', 'DocentesAuth\ForgotPasswordController@showLinkRequestForm');
     Route::post('password/reset', 'DocentesAuth\ResetPasswordController@reset');

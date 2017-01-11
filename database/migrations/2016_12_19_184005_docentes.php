@@ -17,13 +17,14 @@ class Docentes extends Migration
         Schema::create('docentes', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre',140);
+            $table->string('apellidos',140);
             $table->string('grado_estudio',140);
             $table->string('email')->unique();
             $table->string('usuario',140);
             $table->string('password');
             $table->integer('institucion_id')->unsigned();
             $table->foreign('institucion_id')->references('id')->on('instituciones')->onDelete('cascade');
-            $table->string('slug')->nullable();
+            $table->string('imagen')->nullable();   
             $table->rememberToken();
             $table->timestamps();
         });

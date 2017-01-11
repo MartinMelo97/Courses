@@ -9,7 +9,7 @@ class Categoria extends Model
     use Sluggable;
 
     protected $table = 'categorias';
-    protected $fillable = ['nombre'];
+    protected $fillable = ['nombre','porcentaje'];
 
     public function cursos(){
         return $this->belongsToMany('App\Curso')->withTimestamps();
@@ -23,4 +23,4 @@ class Categoria extends Model
             ]
         ];
     }
-}
+} 

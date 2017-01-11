@@ -6,12 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\User;
 use App\Notifications\UserDocenteResetPasswordNotification;
-use Cviebrock\EloquentSluggable\Sluggable;
 class Docente extends User
 {
-    use Sluggable;
     protected $table = 'docentes';
-    protected $fillable = ['nombre','usuario','grado_estudio','email','password'];
+    protected $fillable = ['nombre','apellidos','usuario','grado_estudio','email','imagen','password'];
     protected $hidden = ['password','remember_token'];
 
     public function institucion(){
@@ -32,11 +30,4 @@ class Docente extends User
         $this->notify(new UserDocenteResetPasswordNotification($token));
     }
 
-    public function sluggable(){
-        return [
-            'slug' => [
-                'source' => 'nombre'
-            ]
-        ];
-    }
 }
