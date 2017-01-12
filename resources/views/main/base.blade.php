@@ -30,5 +30,6 @@
             </ul>
         </nav>
         @yield('content','')
+        @yield('scripts','')
     </body>
 </html>

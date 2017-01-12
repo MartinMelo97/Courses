@@ -23,8 +23,11 @@ class CursoController extends Controller
     }
 
     public function detail($slug){
+        //Traigo el curso con ese slug
         $curso = Curso::where('slug',$slug)->first();
+        //Inicializo esta variable para hacerla global
         $cursos_relacionados = "";
+        //Traigo todo el objeto de la institucion a la que pertenece el curso
         $institucion = Institucion::find($curso->institucion_id);
         $categorias = $curso->categorias;
         $tags = $curso->tags;
@@ -32,8 +35,8 @@ class CursoController extends Controller
         $comentarios = $curso->comentarios;
         $ventajas = $curso->ventajas;
         $temario = $curso->temarios;
-        $no_categorias = count($curso->categorias);
-        switch($no_categorias){
+        $no_categorias = count($curso->categorias); //Cuento cuantas categorias tiene el curso MAX 3
+        switch($no_categorias){ //Hacemos un switch para jalar y mostrar los relacionados
             case 1:
                 $categoria_id = $categorias[0]->id;
                 $categoria_object = Categoria::find($categoria_id);
