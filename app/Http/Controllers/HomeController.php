@@ -23,7 +23,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $cursos = Curso::orderBy('created_at')->take(5)->get(); //Traemos los ultimos 5 cursos añadidos
+        /*$cursos = Curso::orderBy('created_at')->take(5)->get(); //Traemos los ultimos 5 cursos añadidos
         $alumnos = Alumno::orderBy('created_at')->take(5)->get(); //Traemos los ultimos 5 alumnos registrados
         //Traemos las instituciones, contamos cuantos cursos tiene c/u, ordenamos por el numeros de cursos
         //Y mandamos las 5 instituciones con mas cursos
@@ -59,6 +59,7 @@ class HomeController extends Controller
         }
         //Mandamos todo a la view
         return view('/admin/home')->with(['cursos'=>$cursos,'alumnos'=>$alumnos,'instituciones'=>$instituciones,
-        'categorias'=>$categorias,'tags'=>$tags]);
+        'categorias'=>$categorias,'tags'=>$tags]);*/
+        return ('Hola');
     }
 }

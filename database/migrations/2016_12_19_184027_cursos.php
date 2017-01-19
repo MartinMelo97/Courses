@@ -21,7 +21,6 @@ class Cursos extends Migration
             $table->date('fecha_inicio');
             $table->string('lenguaje');
             $table->enum('nivel',['facil','intermedio','alto'])->default('facil');
-            $table->enum('membresia',['gratuita','extraordinaria','premium'])->default('gratuita');
             $table->text('descripcion');
             $table->enum('bloqueo',['correo','social','login'])->default('social');
             $table->integer('calificacion')->default(0);

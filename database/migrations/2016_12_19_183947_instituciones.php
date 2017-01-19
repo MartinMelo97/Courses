@@ -24,6 +24,7 @@ class Instituciones extends Migration
             $table->string('estado');
             $table->string('municipio');
             $table->string('direccion');
+            $table->enum('membresia',['gratuita','extraordinaria','premium'])->default('gratuita');
             $table->string('latitud')->nullable();
             $table->string('longitud')->nullable();
             $table->string('facebook')->nullable();

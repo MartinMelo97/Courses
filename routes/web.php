@@ -82,29 +82,34 @@ Route::group(['middleware'=>'alumnos'], function() {
 Route::group(['prefix' => 'admin'], function() {
     Auth::Routes();
     
-    /*Route::group(['middleware'=>'auth'], function(){
+    Route::group(['middleware'=>'auth'], function(){
         Route::get('/dashboard', [
             'uses'=>'HomeController@index',
             'as'=>'admin.dashboard'
         ]);
+
         Route::resource('cursos', 'AdminControllers\CursosController');
+        /*Route::get('cursos/create/{institucion_slug}', [
+            'uses'=>'AdminControllers\CursosController@create_new',
+            'as'=>'cursos.create_new'
+        ]);*/
         Route::get('cursos/{id}/destroy',[
             'uses'=>'AdminControllers\CursosController@destroy',
             'as'=>'cursos.destroy'
         ]);
 
-        Route::resource('categorias', 'AdminControllers\CategoriasController');
+        /*Route::resource('categorias', 'AdminControllers\CategoriasController');
         Route::get('categorias/{id}/destroy',[
             'uses'=>'AdminControllers\CategoriasController@destroy',
             'as'=>'categorias.destroy'
         ]);
-
+*/
         Route::resource('instituciones', 'AdminControllers\InstitucionesController');
         Route::get('instituciones/{id}/destroy',[
             'uses'=>'AdminControllers\InstitucionesController@destroy',
             'as'=>'instituciones.destroy'
         ]);
-        
+        /*
         Route::resource('alumnos', 'AdminControllers\AlumnosController');
         Route::get('alumnos/{id}/destroy',[
             'uses'=>'AdminControllers\AlumnosController@destroy',
@@ -121,8 +126,8 @@ Route::group(['prefix' => 'admin'], function() {
         Route::get('tags/{id}/destroy', [
         'uses'=>'AdminControllers\TagsController@destroy',
         'as'=>'tags.destroy'
-        ]);
-    });*/
+        ]);*/
+    });
 });
 
 //Rutas instituciones

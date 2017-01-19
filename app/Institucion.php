@@ -9,7 +9,7 @@ class Institucion extends Model
 {
     use Sluggable;
    protected $table = 'instituciones';
-   protected $fillable = ['nombre','email','telefono','codigo_postal','pais','estado','municipio','direccion','latitud','longtud','facebok','twitter','google','pagina_web','imagen'];
+   protected $fillable = ['nombre','email','telefono','codigo_postal','pais','membresia','estado','municipio','direccion','latitud','longitud','facebook','twitter','google','pagina_web','imagen'];
 
    public function docentes(){
        return $this->hasMany('App\Docente');

@@ -17,7 +17,6 @@ class CursoSeeder extends Seeder
             'fecha_inicio'=>'2017-03-01',
             'lenguaje'=>'Español',
             'nivel'=>'facil',
-            'membresia'=>'gratuita',
             'bloqueo'=>'correo',
             'descripcion'=>'Este curso te permitirá aprender las bases de la programación con el lenguaje moderno más potente y rápido',
             'media'=>'http://metinsaylan.com/wp-content/uploads/2016/03/Python_logo.png',
@@ -32,12 +31,11 @@ class CursoSeeder extends Seeder
             'fecha_inicio'=>'2017-07-10',
             'lenguaje'=>'Español',
             'nivel'=>'intermedio',
-            'membresia'=>'extraordinaria',
             'bloqueo'=>'social',
             'descripcion'=>'Este curso te permitirá emular el funcionamiento de MATLAB con Python',
             'media'=>'https://bids.berkeley.edu/sites/default/files/styles/400x225/public/projects/numpy_project_page.jpg?itok=flrdydei',
             'slug'=>'aplicaciones-cientificas-con-numpy-y-matplotlib',
-            'institucion_id'=>1
+            'institucion_id'=>2
         ]);
 
         DB::table('cursos')->insert([
@@ -46,12 +44,11 @@ class CursoSeeder extends Seeder
             'fecha_inicio'=>'2017-03-11',
             'lenguaje'=>'Inglés',
             'nivel'=>'alto',
-            'membresia'=>'premium',
             'bloqueo'=>'login',
             'descripcion'=>'Insane',
             'media'=>'https://www.youtube.com/embed/BNUYaLWdR04',
             'slug'=>'desarrollo-de-aplicaciones-de-escritorio-con-lenguaje-ensamblador',
-            'institucion_id'=>1
+            'institucion_id'=>3
         ]);
     }
 }

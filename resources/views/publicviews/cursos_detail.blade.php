@@ -6,12 +6,12 @@
 <!--Aqui dependiendo del tipo de membresia, incluyo otros templates especificos para 
 cada tipo de membresia, que se encuentrna en views/cursos-->
 @section('content')
-    @if($curso->membresia == "gratuita")
-        @include('cursos.base_gratuito')
-    @elseif($curso->membresia == "extraordinaria")
-        @include('cursos.base_extraordinaria')
-    @elseif($curso->membresia == "premium")
-        @include('cursos.base_premium')
+    @if($institucion->membresia == "gratuita")
+        @include('instituciones.base_gratuito')
+    @elseif($institucion->membresia == "extraordinaria")
+        @include('instituciones.base_extraordinaria')
+    @elseif($institucion->membresia == "premium")
+        @include('instituciones.base_premium')
     @endif
 
 <!--Boton de bloqueo-->
@@ -41,6 +41,7 @@ cada tipo de membresia, que se encuentrna en views/cursos-->
     @endif
     <!-- Aqui vienen todos los datos de la institucion-->
     <h4>Contacta a la institucion!</h4>
+    <h4>Tipo de membresia: {{$institucion->membresia}}</h4>
     <h4>CONTACTO</h4>
     <p>Email: {{$institucion->email}}</p>
     <p>Teléfono: {{$institucion->telefono}}</p>
@@ -61,7 +62,7 @@ cada tipo de membresia, que se encuentrna en views/cursos-->
         </tr>
     </table>
     <!--Si la membresia no es gratuita, mostrar el mapa-->
-    @if($curso->membresia != "gratuita")
+    @if($institucion->membresia != "gratuita")
     <div>
     <h3>Aqui iria el mapa</h3>
     <p>Latitud: {{$curso->latitud}}</p>
@@ -69,9 +70,14 @@ cada tipo de membresia, que se encuentrna en views/cursos-->
     </div>
     @endif
     <!-- Si el curso es membresia roja, mostrar cursos relacionados DE LA MISMA INSTITUCION-->
-    @if($curso->membresia == "premium")
+    @if($institucion->membresia == "premium")
         <h3>Otros cursos de la institucion</h3>
-        @for($i = 0; $i < 3; $i++)
+        @if(count($institucion->cursos) < 4)
+        {!! $var = count($institucion->cursos) !!}
+        @else 
+        {!! $var = 4 !!}
+        @endif
+        @for($i = 0; $i < $var; $i++)
             @if(strpos($institucion->cursos[$i]->media, 'youtube')==false)
             <a href="{{route('cursos.detail',$institucion->cursos[$i]->slug)}}"><img src="{{$institucion->cursos[$i]->media}}" alt="" width="100px" height="100px"></a>
             <p>{{$institucion->cursos[$i]->nombre}}</p>

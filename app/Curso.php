@@ -12,7 +12,7 @@ class Curso extends Model
     use Sluggable;
 
     protected $table = 'cursos';
-    protected $fillable = ['nombre','duracion','fecha_inicio','lenguaje','nivel','membresia','descripcion','bloqueo','calificacion','media','slug'];
+    protected $fillable = ['nombre','duracion','fecha_inicio','lenguaje','nivel','descripcion','bloqueo','calificacion','media','slug'];
 
     public function docentes(){
         return $this->belongsToMany('App\Docente')->withTimestamps();
