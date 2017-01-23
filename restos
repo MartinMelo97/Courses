@@ -1,0 +1,11 @@
+
+<h4>Cursos relacionados</h4>
+    @foreach($relacionados as $curso_relacionado)
+        @if(strpos($curso_relacionado->media, 'youtube') == false)
+        <a href="{{route('cursos.detail',$curso_relacionado->slug)}}"><img src="{{$curso_relacionado->media}}" alt="" width="100px" height="100px"></a>
+        <p>Nombre: {{$curso_relacionado->nombre}}</p>
+        @else
+        <iframe width="100" height="100" src="{{$curso_relacionado->media}}" frameborder="0" allowfullscreen></iframe>
+        <a href="{{route('cursos.detail',$curso_relacionado->slug)}}"><p>Nombre: {{$curso_relacionado->nombre}}</p></a>
+        @endif
+    @endforeach

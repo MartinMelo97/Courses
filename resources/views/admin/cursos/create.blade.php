@@ -33,18 +33,18 @@
 
         <div>
             {!! Form::label('institucion','Institución') !!}
-            {!! Form::text('institucion', $institucion_owner->nombre ,['class'=>'','disabled','style'=>'width: 350px;'])!!}
+            {!! Form::text('institucion', $institucion_owner->nombre ,['class'=>'','readonly','style'=>'width: 350px;'])!!}
         </div>
 
         <div>
             {!! Form::label('categorias','Selecciona 3 categorias como máximo')!!}
-            {!! Form::select('categorias',$categorias,null,['class'=>'','required','multiple'])!!}
+            {!! Form::select('categorias[]',$categorias,null,['class'=>'','required','multiple'])!!}
         </div>
 
         <div>
             {!! Form::label('duracion','Duración del curso')!!}
             {!! Form::number('duracion',null,['class'=>'','required']) !!}
-            {!! Form:: select('duracion_unit',['horas'=>'horas','dias'=>'días','semanas'=>'semanas'],null,
+            {!! Form::select('duracion_unit',['horas'=>'horas','dias'=>'días','semanas'=>'semanas'],null,
                 ['class'=>'','required']) !!}
         </div>
 
@@ -124,7 +124,7 @@
                     <span>1.- </span>{!! Form::text('ventajas[]') !!}
                 </div>
 
-                <button id="btn_add_ventajas">Agregar otra ventaja</button>
+                <button id="btn_add_ventajas" type="button">Agregar otra ventaja</button>
         </div>
 
         <!-- Si ya hay docentes registrados en esta institucion, los muestra para eligir a los
@@ -134,7 +134,7 @@
 
             <div>
                 {!! Form::label('docentes','Selecciona a los docentes encargado del curso') !!}
-                {!! Form::select('docentes',$docentes,null,['class'=>'','required','multiple']) !!}
+                {!! Form::select('docentes[]',$docentes,null,['class'=>'','required','multiple']) !!}
             </div>
         <!-- Si no hay, se manda una alerta -->    
         @else
@@ -153,7 +153,7 @@
                         <span>1.- </span>{!! Form::text('temarios[]') !!}
                 </div>
 
-                <button id="btn_add_temarios">Agregar otro temario</button>
+                <button id="btn_add_temarios" type="button">Agregar otro temario</button>
 
             </div>
 
@@ -173,8 +173,23 @@
             
             const MAX_VENTAJAS = 6; 
             const MAX_TEMARIOS = 10;
+            const MAX_CATEGORIAS = 3;
             let cont = 2;
             let cont_t = 2;
+
+            //Aqui hacemos la validacion de que solo se puedan escojer 3 categorias como máximo
+                $('#categorias').on("click", function(){
+
+                    if($(this).is(":focus")){
+
+                        if($('#categorias').val().length > MAX_CATEGORIAS){
+
+                            alert('Solo son 3!');
+                            
+                            $('#categorias').val([]);
+                        }
+                    }
+            });
 
             $('#btn_add_ventajas').click(function(){
                 $('#add_inputs_ventajas').append('<br><span>'+cont+'.- </span><input name="ventajas[]" type="text">');

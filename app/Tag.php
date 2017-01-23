@@ -12,7 +12,7 @@ class Tag extends Model
 
     protected $fillabe = ["nombre"];
 
-    public function cursos(){
+    public function curso(){
         return $this->belongsTo('App\Curso'); 
     }
 

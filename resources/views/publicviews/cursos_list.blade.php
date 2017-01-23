@@ -14,14 +14,14 @@
             <h3>Categorias:</h3>
             <p>
             @for($i = 0; $i < count($curso->categorias); $i++)
-                <a href="{{$curso->categorias_slugs[$i]}}"><span> {{$curso->categorias[$i]}}, </span></a>
+                <a href="{{$curso->categorias_slugs[$i]}}"><span> {{$curso->categorias[$i]}} </span></a>
             @endfor
             </p>
             <br>
             <h3>Tags:</h3>
             <p>Tags: 
             @for($i = 0; $i < count($curso->tags); $i++)
-                <a href="{{$curso->tags_slugs[$i]}}"><span> {{$curso->tags[$i]}}, </span></a>
+                <a href="{{$curso->tags_slugs[$i]}}"><span> {{$curso->tags[$i]->nombre}}, </span></a>
             @endfor
             </p>
             </div></a>

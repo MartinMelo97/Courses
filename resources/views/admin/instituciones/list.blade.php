@@ -4,4 +4,6 @@
     @foreach($instituciones as $institucion)
     <p> Institución: {{$institucion->nombre}}</p>
     @endforeach
+
+    {!! $instituciones->render() !!}
 @endsection
