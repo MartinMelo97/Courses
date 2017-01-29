@@ -23,43 +23,33 @@ class HomeController extends Controller
      */
     public function index()
     {
-        /*$cursos = Curso::orderBy('created_at')->take(5)->get(); //Traemos los ultimos 5 cursos añadidos
-        $alumnos = Alumno::orderBy('created_at')->take(5)->get(); //Traemos los ultimos 5 alumnos registrados
+        $cursos = Curso::orderBy('created_at','DESSC')->take(5)->get(); //Traemos los ultimos 5 cursos añadidos
+
+        $alumnos = Alumno::orderBy('created_at','DESC')->take(5)->get(); //Traemos los ultimos 5 alumnos registrados
+
         //Traemos las instituciones, contamos cuantos cursos tiene c/u, ordenamos por el numeros de cursos
         //Y mandamos las 5 instituciones con mas cursos
-        $instituciones = []; //Declaramos array vacio que sera el que enviaremos al view
-        $array = Institucion::orderBy('nombre')->get(); //Traemos todas las instituciones
-        $array->each(function($array){ //A cada institucion se cuenta sus cursos y se almacena en su funcion cursos
-            $array->cursos = $array->cursos->count(); //Como un override
-        });
-        $array = $array->sortByDesc('cursos'); //Se ordena el array por el numeros de cursos
-        for($i = 0; $i < 2; $i++){ //Se filtran las 5 instituciones con mas cursos
-            $instituciones[$i] = $array[$i];
-        }
-        //Hacemos lo mismo que instituciones, pero con categorias
-        $categorias = [];
-        $array = Categoria::orderBy('nombre')->get();
-        $array->each(function($array){
-            $array->cursos = $array->cursos->count();
-        });
-        $array = $array->sortByDesc('cursos');
-        for($i = 0; $i < 2; $i++){
-            $categorias[$i] = $array[$i];
-        }
 
-        //Hacemos lo mismo que categorias, pero con tags;
-        $tags = [];
-        $array = Tag::orderBy('nombre')->get();
-        $array->each(function($array){
-            $array->cursos = $array->cursos->count();
+        $instituciones = Institucion::withCount('cursos')->orderBy('cursos_count','desc')->take(5)->get();
+        $instituciones->each(function($instituciones){
+            $instituciones->cursos = count($instituciones->cursos);
         });
-        $array = $array->sortByDesc('cursos');
-        for($i = 0; $i < 2; $i++){
-            $tags[$i] = $array[$i];
-        }
+
+        //Hacemos lo mismo que instituciones, pero con categorias
+        $categorias = Categoria::withCount('cursos')->orderBy('cursos_count','desc')->take(5)->get();
+        $categorias->each(function($categorias){
+            $categorias->cursos = count($categorias->cursos);
+        });
+        
+        $tags = Tag::withCount('cursos')->orderBy('cursos_count','desc')->take(5)->get();
+        $tags->each(function($tags){
+            $tags->cursos = count($tags->cursos);
+        });
+
         //Mandamos todo a la view
         return view('/admin/home')->with(['cursos'=>$cursos,'alumnos'=>$alumnos,'instituciones'=>$instituciones,
-        'categorias'=>$categorias,'tags'=>$tags]);*/
-        return ('Hola');
+        'categorias'=>$categorias,'tags'=>$tags]);
+        
     }
+
 }

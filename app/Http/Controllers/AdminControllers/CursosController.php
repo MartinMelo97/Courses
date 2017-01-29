@@ -127,6 +127,7 @@ class CursosController extends Controller
             }
         }
 
+        return redirect()->route('cursos.index');
     }
 
     public function show($id){
@@ -179,7 +180,7 @@ class CursosController extends Controller
         }
 
         else
-        {
+        {   
             if($data->media)
             {
                 $url = $data->media;
@@ -294,7 +295,10 @@ class CursosController extends Controller
         return redirect()->route('cursos.index');
     }
     
-    public function destroy($id){
-        
+    public function destroy($slug){
+        $curso_delete = Curso::where('slug',$slug)->first();
+        $curso_delete->delete();
+
+        return redirect()->route('cursos.index');
     }
 }
