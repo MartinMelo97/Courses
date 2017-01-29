@@ -15,9 +15,7 @@ class Tagss extends Migration
     {
         
         Schema::create('tags', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('curso_id')->unsigned();
-            $table->foreign('curso_id')->references('id')->on('cursos')->onDelete('cascade');
+            $table->increments('id');   
             $table->string('nombre',140);
             $table->string('slug')->nullable();
             $table->timestamps();

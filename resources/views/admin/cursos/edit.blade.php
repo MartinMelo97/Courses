@@ -1,92 +1,75 @@
 @extends('main.base')
-@section('title','Crear Curso')
+@section('title','Editar Curso')
 
 @section('content')
-    <!-- Si no hay institucion seleccionada, debe seleccionarse para poder verificar su membresía -->
-    @if($institucion_slug == "none")
 
-        {!! Form::open(['route'=>'cursos.create','method'=>'GET','files'=>false]) !!}
-
-
-            <p>Por favor introduce a que institución pertenecerá el curso:</p>
-
-            <div>
-                {!! Form::label('institucion','Institución')!!}
-                {!! Form::select('institucion',$institucion,['class'=>'','required'])!!}
-            </div>
-            {!! Form::submit('Siguiente') !!}
-
-        {!! Form::close() !!}
-
-    <!-- Si ya se selecciono, se muestran todos los datos a llenar dependiento de su membresía -->
-    @else
-
-    {!! Form::open(['route'=>'cursos.store','method'=>'POST','files'=>true]) !!}
+    {!! Form::open(['route'=>['cursos.update',$curso->slug],'method'=>'PUT','files'=>true]) !!}
         
         {{ csrf_field() }}
 
         <div>
             {!! Form::label('nombre',"Nombre del curso")!!}
-            {!! Form::text('nombre',null,['class'=>'','placeholder'=>'Ingresa el nombre del curso aqui','required']) !!}
+            {!! Form::text('nombre',$curso->nombre,['class'=>'','required']) !!}
         </div>
 
         <div>
             {!! Form::label('institucion','Institución') !!}
-            {!! Form::text('institucion', $institucion_owner->nombre ,['class'=>'','readonly','style'=>'width: 350px;'])!!}
+            {!! Form::select('institucion', $instituciones, $curso->institucion->id ,['class'=>'','readonly','style'=>'width: 350px;'])!!}
         </div>
 
         <div>
-            {!! Form::label('categorias','Selecciona 3 categorias como máximo')!!}
-            {!! Form::select('categorias[]',$categorias,null,['class'=>'','required','multiple'])!!}
+            {!! Form::label('categorias','Categorias')!!}
+            {!! Form::select('categorias[]',$categorias, $categorias_curso,['class'=>'','required','multiple'])!!}
         </div>
 
         <div>
             {!! Form::label('duracion','Duración del curso')!!}
-            {!! Form::number('duracion',null,['class'=>'','required']) !!}
-            {!! Form::select('duracion_unit',['horas'=>'horas','dias'=>'días','semanas'=>'semanas'],null,
+            {!! Form::number('duracion',$duracion[0],['class'=>'','required']) !!}
+            {!! Form::select('duracion_unit',['horas'=>'horas','dias'=>'días','semanas'=>'semanas'],$duracion[1],
                 ['class'=>'','required']) !!}
         </div>
 
         <div>
             {!! Form::label('fecha_inicio','Fecha de inicio') !!}
-            {!! Form::text('fecha_inicio',null,['class'=>'','placeholder'=>'YYYY-MM-DD','required']) !!}
+            {!! Form::text('fecha_inicio',$curso->fecha_inicio,['class'=>'','required']) !!}
         </div>
 
         <div>
             {!! Form::label('lenguaje','Idioma del curso') !!}
-            {!! Form::select('lenguaje',['español'=>'Español','ingles'=>'Inglés'] ,null,['class'=>'','required']) !!}
+            {!! Form::select('lenguaje',['español'=>'Español','ingles'=>'Inglés'] ,$curso->lenguaje,['class'=>'','required']) !!}
         </div>
 
         <div>
             {!! Form::label('nivel','Nivel del curso') !!}
-            {!! Form::select('nivel',['facil'=>'Fácil','intermedio'=>'Intermedio','alto'=>'Difícil'], null, 
+            {!! Form::select('nivel',['facil'=>'Fácil','intermedio'=>'Intermedio','alto'=>'Difícil'], $curso->nivel, 
                 ['class'=>'','required']) !!}
         </div>
 
         <div>
             {!! Form::label('descripcion','Descripción del curso') !!}
-            {!! Form::textarea('descripcion') !!}
+            {!! Form::textarea('descripcion',$curso->descripcion) !!}
         </div>
 
         <div>
             {!! Form::label('bloqueo','Bloqueo para visualizar información') !!}
             {!! Form::select('bloqueo',['correo'=>'Correo Electrónico','social'=>'Redes Sociales','login'=>'Iniciar sesión'],
-            null,['class'=>'','required'])!!}
+            $curso->bloqueo,['class'=>'','required'])!!}
         </div>
 
         <!-- Si la membresia no es premium, podrán subir una imagen para su curso -->
-        @if($institucion_owner->membresia != "premium")
+        @if($curso->institucion->membresia != "premium")
 
+            <img src="{{$curso->media}}" alt="" width="200" height="100">
             <div>
-                {!! Form::label('media','Sube una foto para tu curso!') !!}
+                {!! Form::label('media','Actualizar foto') !!}
                 {!! Form::file('media') !!}
             </div>
 
         <!-- Si si es premium, podrá mandar la URL de su video (Youtube de preferencia) -->
         @else
-
+            <iframe width="500" height="500" src="{{$curso->media}}" frameborder="0" allowfullscreen></iframe>
             <div>
-                {!! Form::label('media','Adjunta la URL de un video que describa tu curso') !!}
+                {!! Form::label('media','Actualizar curso') !!}
                 {!! Form::text('media', null,['class'=>'','placeholder'=>'https://...com']) !!}
             </div>
 
@@ -94,23 +77,23 @@
 
         <!-- Aqui se podrán agregar las tags del curso-->
         <div>
-            {!! Form::label('tags', 'Agrega tags!') !!}
-            <p>Puedes agregar máximo <span id="number_of_tags"></span> tags</p>
-            <div id="add_inputs_tags">
-                    <span>1.- </span>{!! Form::text('tags[]') !!}
-            </div>
-
-            <button id="btn_add_tags" type="button">Agregar otro tag</button>
+            {!! Form::label('tags', 'Tags!') !!}
+            <br>
+            @foreach($curso->tags as $tag)
+                {!! Form::text('tags[]',$tag->nombre) !!}
+                <br>
+            @endforeach
 
         </div>
         <br>
         <div>
-            {!! Form::label('ventajas','Escribe las ventajas del curso') !!}
-               
-                <div id="add_inputs_ventajas">
-                    <span>1.- </span>{!! Form::text('ventajas[]') !!}
+            {!! Form::label('ventajas','Ventajas del curso') !!}
+               <br>
+               <div id="add_inputs_ventajas">
+                    @foreach($curso->ventajas as $ventaja)
+                        {!! Form::text('ventajas[]',$ventaja->ventaja) !!}<br>
+                    @endforeach
                 </div>
-
                 <button id="btn_add_ventajas" type="button">Agregar otra ventaja</button>
         </div>
 
@@ -121,7 +104,7 @@
 
             <div>
                 {!! Form::label('docentes','Selecciona a los docentes encargado del curso') !!}
-                {!! Form::select('docentes[]',$docentes,null,['class'=>'','required','multiple']) !!}
+                {!! Form::select('docentes[]',$docentes,$docentes_curso,['class'=>'','required','multiple']) !!}
             </div>
         <!-- Si no hay, se manda una alerta -->    
         @else
@@ -131,15 +114,16 @@
         @endif
 
         <!-- Si la membresia no es gratuita, puede añadir el temario del curso -->
-        @if($institucion_owner->membresia != "gratuita")
+        @if($curso->institucion->membresia != "gratuita")
 
             <div>
-                {!! Form::label('temario','Añade el temario de tu curso') !!}
-
+                {!! Form::label('temario','Temario de tu curso') !!}
+                <br>
                 <div id="add_inputs_temarios">
-                        <span>1.- </span>{!! Form::text('temarios[]') !!}
+                @foreach($curso->temarios as $temario)
+                    {!! Form::text('temarios[]',$temario->tema) !!} <br>
+                @endforeach
                 </div>
-
                 <button id="btn_add_temarios" type="button">Agregar otro temario</button>
 
             </div>
@@ -148,23 +132,22 @@
         <br><br>
 
         <!-- Debo crear un input tipo hidden para poder especificarle a jquery la constante de máximas tags que podrá agregar -->
-        @if($institucion_owner->membresia == "gratuita")
+        @if($curso->institucion->membresia == "gratuita")
 
             {!! Form::hidden('tags_number_id',3,['id'=>'tags_number_id']) !!}
 
-        @elseif($institucion_owner->membresia == "extraordinaria")
+        @elseif($curso->institucion->membresia == "extraordinaria")
 
             {!! Form::hidden('tags_number_id',5,['id'=>'tags_number_id']) !!}
 
-        @elseif($institucion_owner->membresia == "premium")
+        @elseif($curso->institucion->membresia == "premium")
 
             {!! Form::hidden('tags_number_id',7,['id'=>'tags_number_id']) !!}
 
         @endif
 
 
-        {!!Form::submit('Crear curso!') !!}
-    @endif <!-- Termina if de instituciones -->
+        {!!Form::submit('Actualizar curso!') !!}
     {!! Form::close() !!}
 
 @endsection
@@ -184,7 +167,7 @@
             let cont_tags = 1;
 
             //Automáticamente que se carge la página, se le pasa el parámetro de cuantos tags puede agregar en el label
-            $('#number_of_tags').append(MAX_TAGS);
+            //$('#number_of_tags').append(MAX_TAGS);
 
             //Aqui hacemos la validacion de que solo se puedan escojer 3 categorias como máximo
                 $('#categorias').on("click", function(){

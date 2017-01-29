@@ -47,11 +47,11 @@ class Curso extends Model
     }
 
     public function tags(){
-        return $this->hasMany('App\Tag');
+        return $this->belongsToMany('App\Tag')->withTimestamps();
     }
 
     public function tags_slugs(){
-         return $this->hasMany('App\Tag');
+         return $this->belongsToMany('App\Tag')->withTimestamps();
     }
 
     public function sluggable(){

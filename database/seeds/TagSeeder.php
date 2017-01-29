@@ -12,9 +12,13 @@ class TagSeeder extends Seeder
     public function run()
     {
         DB::table('tags')->insert([
-            'curso_id'=>1,
             'nombre'=>'Informática',
             'slug'=>'informatica'
+        ]);
+
+        DB::table('tags')->insert([
+            'nombre'=>'Fixter',
+            'slug'=>'fixter'
         ]);
     }
 }

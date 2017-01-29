@@ -100,12 +100,12 @@ Route::group(['prefix' => 'admin'], function() {
             'as'=>'categorias.destroy'
         ]);
         
-        Route::resource('instituciones', 'AdminControllers\InstitucionesController');
+        Route::resource('instituciones', 'AdminControllers\InstitucionesController',['except'=>'show']);
         Route::get('instituciones/{id}/destroy',[
             'uses'=>'AdminControllers\InstitucionesController@destroy',
             'as'=>'instituciones.destroy'
         ]);
-        Route::resource('docentes', 'AdminControllers\DocentesController');
+        Route::resource('docentes', 'AdminControllers\DocentesController',['execpt'=>'show']);
         Route::get('docentes/{id}/destroy',[
             'uses'=>'AdminControllers\DocentesController@destroy',
             'as'=>'docentes.destroy'

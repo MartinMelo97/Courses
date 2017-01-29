@@ -10,6 +10,9 @@ class CategoriasController extends Controller
 {
     public function index(){
         $categorias = Categoria::orderBy('nombre','DESC')->paginate(10);
+        $categorias->each(function($categorias){
+            $categorias->cursos = count($categorias->cursos);
+        });
         return view('admin.categorias.list')->with('categorias',$categorias);
     }
 
@@ -28,15 +31,24 @@ class CategoriasController extends Controller
 
     }
 
-    public function edit($id){
-
+    public function edit($slug){
+        $categoria = Categoria::where('slug',$slug)->first();
+        
+        return view('admin.categorias.edit')->with('categoria',$categoria);
     }
 
-    public function update(Request $data, $id){
+    public function update(Request $data, $slug){
+        $categoria = Categoria::where('slug',$slug)->first();
+        $categoria->fill($data->all());
+        $categoria->save();
 
+        return redirect()->route('categorias.index');
     }
     
-    public function destroy($id){
-        
+    public function destroy($slug){
+        $categoria = Categoria::where('slug',$slug);
+        $categoria->delete();
+
+        return redirect()->route('categorias.index');
     }
 }

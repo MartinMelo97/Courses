@@ -12,8 +12,8 @@ class Tag extends Model
 
     protected $fillabe = ["nombre"];
 
-    public function curso(){
-        return $this->belongsTo('App\Curso'); 
+    public function cursos(){
+        return $this->belongsToMany('App\Curso')->withTimestamps(); 
     }
 
     public function sluggable(){

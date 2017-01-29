@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AdminControllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Institucion;
+use Illuminate\Support\Facades\File;
 
 class InstitucionesController extends Controller
 {
@@ -30,19 +31,31 @@ class InstitucionesController extends Controller
         return redirect()->route('instituciones.index');
     }
 
-    public function show($id){
-
+    public function edit($slug){
+        $institucion = Institucion::where('slug',$slug)->first();
+        return view('admin.instituciones.edit')->with('institucion',$institucion);
     }
 
-    public function edit($id){
-
-    }
-
-    public function update(Request $data, $id){
-
+    public function update(Request $data, $slug){
+        $institucion_edit = Institucion::where('slug',$slug)->first();
+        $institucion_edit->fill($data->all());
+        
+        if($data->imagen != null){
+            File::delete($institucion_edit->slug);
+            $file = $data->file('imagen');
+            $nombre = 'Institucion_'.$institucion_edit->nombre.'.'.$file->getClientOriginalExtension();
+            $path = public_path().'/images/instituciones/';
+            $file->move($path,$nombre);
+            $route = '/images/instituciones/'.$nombre;
+            $institucion_edit->imagen = $route;
+        }
+        $institucion_edit->save();
+        return redirect()->route('instituciones.index');
     }
     
-    public function destroy($id){
-        
+    public function destroy($slug){
+        $institucion_delete = Institucion::where('slug',$slug)->first();
+        $institucion_delete->delete();
+        return redirect()->route('instituciones.index');
     }
 }
