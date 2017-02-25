@@ -31,7 +31,8 @@ class Instituciones extends Migration
             $table->string('twitter')->nullable();
             $table->string('google')->nullable();
             $table->string('pagina_web')->nullable();
-            $table->string('imagen')->nullable();
+            $table->integer('imagen_id')->nullable()->unsigned();
+            $table->foreign('imagen_id')->references('id')->on('imagenes')->onDelete('cascade');
             $table->string('slug')->nullable();
             $table->timestamps();
             

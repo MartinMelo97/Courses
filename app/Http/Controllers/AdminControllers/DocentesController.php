@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Docente;
 use App\Institucion;
+use App\Imagen;
 
 class DocentesController extends Controller
 {
@@ -34,7 +35,11 @@ class DocentesController extends Controller
             $path = public_path().'/images/docentes';
             $file->move($path,$name);
             $route = 'images/docentes'.$name;
-            $new_docente->imagen = $route;
+            
+            $imagen = new Imagen();
+            $imagen->ruta = $route;
+            $imagen->save();
+            $new_docente->imagen_id = $imagen->id;  
         }
 
         $new_docente->institucion_id = $data->institucion_id;
@@ -46,6 +51,7 @@ class DocentesController extends Controller
 
 
     public function edit($usuario){
+
         $docente = Docente::where('usuario',$usuario)->first();
         $instituciones = Institucion::orderBy('nombre','DESC')->pluck('nombre','id');
         error_log($docente->institucion->nombre);

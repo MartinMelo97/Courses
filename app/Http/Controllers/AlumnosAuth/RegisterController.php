@@ -1,14 +1,12 @@
 <?php
-
 namespace App\Http\Controllers\AlumnosAuth;
-
 use App\User;
 use App\Alumno;
+use App\Imagen;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Auth;
-
 class RegisterController extends Controller
 {
     /*
@@ -21,16 +19,13 @@ class RegisterController extends Controller
     | provide this functionality without requiring any additional code.
     |
     */
-
     use RegistersUsers;
-
     /**
      * Where to redirect users after login / registration.
      *
      * @var string
      */
     protected $redirectTo = '/login';
-
     /**
      * Create a new controller instance.
      *
@@ -40,12 +35,10 @@ class RegisterController extends Controller
     {
         $this->middleware('guest');
     }
-
     public function showRegistrationForm()
     {
         return view('alumnos.auth.register');
     }
-
     /**
      * Get a validator for an incoming registration request.
      *
@@ -65,7 +58,6 @@ class RegisterController extends Controller
             'password' => 'required|min:6|confirmed',
         ]);
     }
-
     /**
      * Create a new user instance after a valid registration.
      *
@@ -74,12 +66,26 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $file = $data['imagen'];
-        $name = 'Alumno_'.$data['usuario'].'.'.$file->getClientOriginalExtension();
-        $path = public_path().'/images/alumnos/profile';
-        $file->move($path,$name);
-        $route = '/images/alumnos/profile/'.$name;
-        return Alumno::create([
+        $aux = 0;
+        if(!empty($data['imagen'])){
+            $file = $data['imagen'];
+            $name = 'Alumno_'.$data['usuario'].'.'.$file->getClientOriginalExtension();
+            $path = public_path().'/images/alumnos/profile';
+            $file->move($path,$name);
+            $route = '/images/alumnos/profile/'.$name;
+
+            $imagen = new Imagen();
+            $imagen->ruta = $route;
+            $imagen->save();
+            $aux = $imagen->id;
+        }
+        else
+        {
+            $aux = 8;
+        }
+
+        
+        /*return Alumno::create([
             'nombre' => $data['nombre'],
             'apellidos' => $data['apellidos'],
             'usuario' => $data['usuario'],
@@ -90,9 +96,22 @@ class RegisterController extends Controller
             'pais' => $data['pais'],
             'fecha_nacimiento' => $data['fecha_nacimiento'],
             'password' => bcrypt($data['password']),
-        ]);
-    }
+        ]);*/
 
+        $alumno = new Alumno();
+        $alumno->nombre = $data['nombre'];
+        $alumno->apellidos = $data['apellidos'];
+        $alumno->usuario = $data['usuario'];
+        $alumno->email = $data['email'];
+        $alumno->sexo = $data['sexo'];
+        $alumno->imagen_id = $aux;
+        $alumno->pais = $data['pais'];
+        $alumno->fecha_nacimiento = $data['fecha_nacimiento'];
+        $alumno->password = bcrypt($data['password']);
+        $alumno->save();
+
+        return $alumno;
+    }
     protected function guard()
     {
         return Auth::guard('alumnos');

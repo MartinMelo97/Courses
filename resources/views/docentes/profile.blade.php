@@ -11,6 +11,9 @@
     <p>Nombre: {{$docente->nombre}}</p>
     <p>Usuario: {{$docente->usuario}}</p>
     <p>Correo Electrónico: {{$docente->email}}</p>
+    @if($docente->imagen == null)
+        <img src="{{$docente->imagen}}" alt="">
+    @endif
     <p>Grado de estudios: {{$docente->grado_estudio}}</p>
     <a href="{{route('instituciones.detail',$docente->institucion->slug)}}">
     <p>Institucion: {{$docente->institucion->nombre}}</p></a>

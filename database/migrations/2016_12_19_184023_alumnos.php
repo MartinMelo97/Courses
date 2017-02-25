@@ -20,7 +20,8 @@ class Alumnos extends Migration
             $table->string('apellidos',140);
             $table->string('email')->unique();
             $table->enum('sexo',['masculino','femenino']);
-            $table->string('imagen')->nullable();
+            $table->integer('imagen_id')->nullable()->unsigned();
+            $table->foreign('imagen_id')->references('id')->on('imagenes')->onDelete('cascade');
             $table->string('pais');
             $table->date('fecha_nacimiento');
             $table->string('usuario',140)->unique();

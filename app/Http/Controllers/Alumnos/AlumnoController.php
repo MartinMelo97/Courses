@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Alumnos;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Alumno;
+use App\Imagen;
+
 class AlumnoController extends Controller
 {
     public function profile(){
@@ -36,17 +38,24 @@ class AlumnoController extends Controller
     public function profileEditPOST(Request $request){
         $alumno_id = \Auth::guard('alumnos')->user()->id;
         $alumno = Alumno::find($alumno_id);
-        $some = $alumno->imagen;
+        $current_image = $alumno->imagen->id;
+        $alumno->fill($request->all());
+
         if(!is_null($request->imagen)){
             $file = $request->imagen;
             $name = 'Alumno_'.$request->usuario.'.'.$file->getClientOriginalExtension();
             $path = public_path().'/images/alumnos/profile';
             $file->move($path,$name);
             $route = '/images/alumnos/profile/'.$name;
-            $some = $route;
+            $imagen = new Imagen();
+            $imagen->ruta = $route;
+            $imagen->save();
+            $alumno->imagen_id = $imagen->id;
         }
-            $alumno->fill($request->all());
-            $alumno->imagen = $some;
+        else
+        {
+            $alumno->imagen_id = $current_image;
+        }
             $alumno->save();
             return redirect()->route('alumnos.perfil.own');
        

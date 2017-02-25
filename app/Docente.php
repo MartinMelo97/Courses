@@ -9,7 +9,7 @@ use App\Notifications\UserDocenteResetPasswordNotification;
 class Docente extends User
 {
     protected $table = 'docentes';
-    protected $fillable = ['nombre','apellidos','usuario','grado_estudio','email','imagen','password'];
+    protected $fillable = ['nombre','apellidos','usuario','grado_estudio','email','password'];
     protected $hidden = ['password','remember_token'];
 
     public function institucion(){
@@ -18,6 +18,10 @@ class Docente extends User
 
     public function cursos(){
         return $this->belongsToMany('App\Curso')->withTimestamps();
+    }
+
+    public function imagen(){
+        return $this->belongsTo('App\Imagen');
     }
     /**
      * Send the password reset notification.

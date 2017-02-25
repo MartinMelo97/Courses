@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AdminControllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Institucion;
+use App\Imagen;
 use Illuminate\Support\Facades\File;
 
 class InstitucionesController extends Controller
@@ -19,14 +20,26 @@ class InstitucionesController extends Controller
     }
 
     public function store(Request $data){
-        $file = $data->file('imagen');
-        $nombre = 'Institucion_'.$data->nombre.'.'.$file->getClientOriginalExtension();
-        $path = public_path().'/images/instituciones/';
-        $file->move($path,$nombre);
-        $route = '/images/instituciones/'.$nombre;
+
         $institucion = new Institucion();
         $institucion->fill($data->all());
-        $institucion->imagen = $route;
+
+        if(!is_null($data->imagen)){
+            $file = $data->file('imagen');
+            $nombre = 'Institucion_'.$data->nombre.'.'.$file->getClientOriginalExtension();
+            $path = public_path().'/images/instituciones/';
+            $file->move($path,$nombre);
+            $route = '/images/instituciones/'.$nombre;
+            $imagen = new Imagen();
+            $imagen->ruta = $route;
+            $imagen->save();
+            $institucion->imagen_id = $imagen->id;
+        }
+        else
+        {
+            $institucion->imagen_id = 2;
+        }
+        
         $institucion->save();
         return redirect()->route('instituciones.index');
     }
@@ -38,16 +51,25 @@ class InstitucionesController extends Controller
 
     public function update(Request $data, $slug){
         $institucion_edit = Institucion::where('slug',$slug)->first();
+        $current_image = $institucion_edit->imagen->id;
         $institucion_edit->fill($data->all());
-        
-        if($data->imagen != null){
-            File::delete($institucion_edit->slug);
+
+        if(!is_null($data->imagen)){
             $file = $data->file('imagen');
             $nombre = 'Institucion_'.$institucion_edit->nombre.'.'.$file->getClientOriginalExtension();
             $path = public_path().'/images/instituciones/';
             $file->move($path,$nombre);
             $route = '/images/instituciones/'.$nombre;
-            $institucion_edit->imagen = $route;
+
+            $imagen = new Imagen();
+            $imagen->ruta = $route;
+            $imagen->save();
+            error_log($imagen->id);
+            $institucion_edit->imagen_id = $imagen->id;
+        }
+        else
+        {
+            $institucion_edit->imagen_id = $current_image;
         }
         $institucion_edit->save();
         return redirect()->route('instituciones.index');

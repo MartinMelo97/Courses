@@ -80,7 +80,7 @@
         {!! Form::text('pagina_web',$institucion->pagina_web,['class'=>''])!!}
     </div> 
 
-    <img src="{{$institucion->imagen}}" alt="" width="300" height="200">
+    <img src="{{$institucion->imagen->ruta}}" alt="" width="300" height="200">
     <div>
         {!! Form::label('imagen',' Subir logo')!!}
         {!! Form::file('imagen') !!}

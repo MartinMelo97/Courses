@@ -32,7 +32,22 @@ class DocenteController extends Controller
         $docente_id = \Auth::guard('docentes')->user()->id;
         $docente = Docente::find($docente_id);
         $docente->fill($request->all());
+
+        $current_imagen = $docente->imagen->id;
+        if(!is_null($request->imagen)){
+            $file = $request->imagen;
+            $name = 'Docente_'.$request->usuario.'.'.$file->getClientOriginalExtension();
+            $path = public_path().'/images/docentes';
+            $file->move($path,$name);
+            $route = '/images/docentes/'.$name;
+            $imagen = new Imagen();
+            $imagen->ruta = $route;
+            $imagen->save();
+            $docente->imagen_id = $imagen->id;
+        }
+        $docente->imagen_id = $current_imagen;
         $docente->save();
+        
         return redirect()->route('docentes.perfil.own');
     }
 }

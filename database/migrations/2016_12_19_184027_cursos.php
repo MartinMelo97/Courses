@@ -26,7 +26,7 @@ class Cursos extends Migration
             $table->integer('calificacion')->default(0);
             $table->integer('visitas')->default(0);
             $table->integer('clicks')->default(0);
-            $table->string('media')->nullable();
+            $table->string('video')->nullable();
             $table->integer('institucion_id')->unsigned();
             $table->foreign('institucion_id')->references('id')->on('instituciones')->onDelete('cascade');
             $table->string('slug')->nullable();

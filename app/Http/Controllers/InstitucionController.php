@@ -9,6 +9,9 @@ class InstitucionController extends Controller
     
     public function list(){
         $instituciones = Institucion::orderBy('nombre')->paginate(10);
+        $instituciones->each(function($instituciones){
+            $instituciones->imagen;
+        });
         return view('publicviews.instituciones_list')->with('instituciones',$instituciones);
     }
 

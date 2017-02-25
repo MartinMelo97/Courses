@@ -41,7 +41,7 @@
                             </div>
                         </div>
                         @if(!is_null($alumno->imagen))
-                            <img src="{{asset($alumno->imagen)}}" style="width:200px; height:200px;">
+                            <img src="{{asset($alumno->imagen->ruta)}}" style="width:200px; height:200px;">
                         @endif
                         <div>      
                             <label for="imagen">Imagen</label>

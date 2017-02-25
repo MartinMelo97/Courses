@@ -24,7 +24,8 @@ class Docentes extends Migration
             $table->string('password');
             $table->integer('institucion_id')->unsigned();
             $table->foreign('institucion_id')->references('id')->on('instituciones')->onDelete('cascade');
-            $table->string('imagen')->nullable();   
+            $table->integer('imagen_id')->nullable()->unsigned();   
+            $table->foreign('imagen_id')->references('id')->on('imagenes')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
         });

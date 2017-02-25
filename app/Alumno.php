@@ -9,7 +9,7 @@ class Alumno extends User
 {
 
     protected $table = 'alumnos';
-    protected $fillable = ['nombre','apellidos','usuario','email','sexo','imagen','pais','fecha_nacimiento','password'];
+    protected $fillable = ['nombre','apellidos','usuario','email','sexo','pais','fecha_nacimiento','password'];
     protected $hidden = ['password', 'remember_token'];
  
     public function cursos(){
@@ -19,6 +19,11 @@ class Alumno extends User
     public function comentarios(){
         return $this->hasMany('App\Comentario');
     }
+
+    public function imagen(){
+        return $this->belongsTo('App\Imagen');
+    }
+    
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new UserAlumnoResetPasswordNotification($token));

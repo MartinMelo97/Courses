@@ -77,12 +77,27 @@ class RegisterController extends Controller
             'grado_estudio' => $data['grado_estudio'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),*/
-
+            $aux = null;
+            if(!is_null($data['imagen'])){
+                $file = $data['imagen'];
+                $name = 'Docente_'.$data['usuario'].'.'.$file->getClientOriginalExtension();
+                $path = public_path().'/images/docentes';
+                $file->move($path,$name);
+                $route = '/images/docentes/'.$name;
+                $imagen = new Imagen();
+                $imagen->ruta = $route;
+                $imagen->save();
+                $aux = $imagen->id;
+            }
+            else{
+                $aux = 7;
+            }
             $docente = new Docente();
             $docente->nombre = $data['nombre'];
             $docente->usuario = $data['usuario'];
             $docente->grado_estudio = $data['grado_estudio'];
             $docente->email = $data['email'];
+            $docente->imagen_id = $aux;
             $docente->password = bcrypt($data['password']);
             $docente->institucion()->associate(Docente::find($data['institucion_id']));
             $docente->save();

@@ -15,6 +15,7 @@ class CursoController extends Controller
         $cursos = Curso::orderBy('created_at','DESC')->paginate(5); //Traemos todos los cursos, y paginamos con 5
         
         $cursos->each(function($cursos){
+            $cursos->imagenes;
             $cursos->institucion;
             $cursos->categorias = $cursos->categorias->pluck('nombre');
             $cursos->categorias_slugs = $cursos->categorias_slugs->pluck('slug');
@@ -107,10 +108,11 @@ class CursoController extends Controller
                 //Ahora voy con los categorias que solo aportarán un curso
                 for($m = 0; $m < 2; $m++)
                 {
+                    $truncate_at = 1;
                     $categoria_id = $categorias[$m + 1]->id;
                     $categoria_object = Categoria::find($categoria_id);
-                    $prerelacionados = $categoria_object->cursos->reverse()->take(1);
-
+                    $cursos_of_categoria = $categoria_object->cursos;
+                    $prerelacionados = $this->prerelacionados($cursos_of_categoria, $slug, $truncate_at);
                     $cursos_relacionados = $this->relacionados($prerelacionados, $cursos_relacionados);
                 }
             break;

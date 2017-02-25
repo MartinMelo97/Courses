@@ -54,6 +54,10 @@ class Curso extends Model
          return $this->belongsToMany('App\Tag')->withTimestamps();
     }
 
+    public function imagenes(){
+        return $this->belongsToMany('App\Imagen')->withTimestamps();
+    }
+
     public function sluggable(){
         return [
             'slug' => [

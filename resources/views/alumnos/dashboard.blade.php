@@ -14,6 +14,9 @@
         <div>
             <h3>Nombre: <a href="{{route ('cursos.detail',$curso->slug)}}">{{$curso->nombre}}</h3></a>
             <h5>Institucion: <a href="{{route ('instituciones.detail',$curso->institucion->slug)}}">{{$curso->institucion->nombre}}</a></h5>
+            @if(count($curso->imagenes) > 0)
+            <img src="{{$curso->imagen[0]}}" alt="">
+            @endif
             <p>Fecha de Inicio: {{$curso->fecha_inicio}}</p>
             <p>Ir a curso</p>
         </div>
