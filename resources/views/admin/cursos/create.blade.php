@@ -75,23 +75,33 @@
         </div>
 
         <!-- Si la membresia no es premium, podrán subir una imagen para su curso -->
-        @if($institucion_owner->membresia != "premium")
+        @if($institucion_owner->membresia == "premium")
 
             <div>
-                {!! Form::label('media','Sube una foto para tu curso!') !!}
-                {!! Form::file('media') !!}
-            </div>
-
-        <!-- Si si es premium, podrá mandar la URL de su video (Youtube de preferencia) -->
-        @else
-
-            <div>
-                {!! Form::label('media','Adjunta la URL de un video que describa tu curso') !!}
-                {!! Form::text('media', null,['class'=>'','placeholder'=>'https://...com']) !!}
+                {!! Form::label('video','Adjunta la URL de un video que describa tu curso') !!}
+                {!! Form::text('video', null,['class'=>'','placeholder'=>'https://...com']) !!}
             </div>
 
         @endif<!-- Termina if de membresia -->
 
+        <!-- Si la membresia no es gratuita, puede tener hasta 5 imágenes -->
+        @if($institucion_owner->membresia == "gratuita")
+            <div>
+                {!! Form::label('imagen','Sube una imagen de tu curso') !!}
+                {!! Form::file('imagen') !!}
+            </div>
+        @else
+            <div>
+                {!! Form::label('imagenes','Sube imagenes de tu curso') !!}
+                <p>Puedes agregar máximo 5 imágenes</p>
+                <div id="add_inputs_images">
+                    <span>1.- </span>{!! Form::file('imagen[]') !!}
+                </div>
+                <button id="btn_add_images" type="button">Agregar otra imagen</button>
+            </div>
+        @endif
+
+        <br>
         <!-- Aqui se podrán agregar las tags del curso-->
         <div>
             {!! Form::label('tags', 'Agrega tags!') !!}
@@ -178,10 +188,12 @@
             const MAX_VENTAJAS = 6; 
             const MAX_TEMARIOS = 10;
             const MAX_CATEGORIAS = 3;
+            const MAX_IMAGES = 6;
             const MAX_TAGS = $('#tags_number_id').val();
             let cont = 2;
             let cont_t = 2;
             let cont_tags = 1;
+            let cont_images = 2;
 
             //Automáticamente que se carge la página, se le pasa el parámetro de cuantos tags puede agregar en el label
             $('#number_of_tags').append(MAX_TAGS);
@@ -231,6 +243,16 @@
                 {
                     console.log('Chingax3');
                     $('#btn_add_tags').css({'display':'none'});
+                }
+            });
+
+            $('#btn_add_images').click(function(){
+                $('#add_inputs_images').append('<br><span>'+cont_images+'- </span><input name="imagen[]" type="file">');
+                cont_images += 1;
+                if(cont_images == MAX_IMAGES)
+                {
+                    console.log('Chingax4');
+                    $('#btn_add_images').css({'display':'none'});
                 }
             });
         });

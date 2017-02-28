@@ -36,7 +36,7 @@
         </div>
 
         @if($docente->imagen)
-            <img src="{{$docente->imagen}}" alt="">
+            <img src="{{$docente->imagen->ruta}}" alt="">
         @endif
         <div>
             {!! Form::label('imagen','Actualiza tu imagen') !!}

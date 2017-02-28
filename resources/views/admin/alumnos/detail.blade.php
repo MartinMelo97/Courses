@@ -13,7 +13,7 @@
     @if($alumno->imagen == null)
         <h5>No tiene imagen</h5>
     @else
-        <img src="{{asset($alumno->imagen)}}" style="width:200px; height:200px;">
+        <img src="{{asset($alumno->imagen->ruta)}}" style="width:200px; height:200px;">
     @endif
     <p>Pais: {{$alumno->pais}}</p>
     <p>Fecha de nacimiento: {{$alumno->fecha_nacimiento}}</p>

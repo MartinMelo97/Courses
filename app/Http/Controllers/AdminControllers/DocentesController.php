@@ -60,6 +60,7 @@ class DocentesController extends Controller
 
     public function update(Request $data, $usuario){
         $docente = Docente::where('usuario',$usuario)->first();
+        $current_image = $docente->imagen_id;
         $docente->fill($data->all());
         if($data->imagen)
         {
@@ -68,8 +69,16 @@ class DocentesController extends Controller
             $path = public_path().'/images/docentes/';
             $file->move($path, $name);
             $route = '/images/docentes/'.$name;
-            $docente->imagen = $route;
+            
+            $imagen = new Imagen();
+            $imagen->ruta = $route;
+            $imagen->save();
+            $docente->imagen_id = $imagen->id;
         }
+        else{
+            $docente->imagen_id = $current_image;
+        }
+
         $docente->save();
         return redirect()->route('docentes.index');
     }

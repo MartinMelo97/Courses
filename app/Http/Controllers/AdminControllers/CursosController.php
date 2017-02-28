@@ -13,6 +13,7 @@ use App\Ventaja;
 use App\Temario;
 use App\Categoria;
 use App\Tag;
+use App\Imagen;
 
 class CursosController extends Controller
 {
@@ -43,32 +44,20 @@ class CursosController extends Controller
 
 
     public function store(Request $data){
-
         $curso_create = new Curso();
         $institucion = Institucion::where('nombre',$data->institucion)->first();
         $curso_create->fill($data->all());
         $curso_create->institucion_id = $institucion->id;
         $curso_create->duracion = $data->duracion.' '.$data->duracion_unit;
-        if($institucion->membresia != "premium")
-        {
-            $file = $data->file('media');
-            $nombre = 'Curso_'.$data->nombre.'.'.$file->getClientOriginalExtension();
-            $path = public_path().'/images/cursos/';
-            $file->move($path,$nombre);
-            $route = '/images/cursos/'.$nombre;
-            $curso_create->media = $route;
-        }
         
-        else
-
-        {
+        if($institucion->membresia == "premium"){
             $url = $data->media;
-            if(strpos($url, 'youtube') == true)
-            {
-                $partes = explode("v=",$url);
-                $url = 'https://youtube.com/embed/'.$partes[1];
-            }
-            $curso_create->media = $url;
+                if(strpos($url, 'youtube') == true)
+                {
+                    $partes = explode("v=",$url);
+                    $url = 'https://youtube.com/embed/'.$partes[1];
+                }
+            $curso_create->video = $data->$url;
         }
 
         $curso_create->save();
@@ -125,6 +114,27 @@ class CursosController extends Controller
                 $new_temario->curso_id = $curso_create->id;
                 $new_temario->save();
             }
+        }
+
+        if(count($data->imagen) > 0)
+        {
+            $imagenes_to_save = [];
+            $cont = 0;
+            foreach($data->imagen as $img){
+                $file = $img;
+                $nombre = 'Curso_'.$data->nombre.'-'.($cont+1).'.'.$file->getClientOriginalExtension();
+                $path = public_path().'/images/cursos/';
+                $file->move($path,$nombre);
+                $route = '/images/cursos/'.$nombre;
+                $imagen = new Imagen();
+                $imagen->ruta = $route;
+                $imagen->save();
+                $imagenes_to_save[] = $imagen->id;
+                $cont++;
+            }
+
+            $curso_create->imagenes()->sync($imagenes_to_save);
+
         }
 
         return redirect()->route('cursos.index');
