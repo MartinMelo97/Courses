@@ -51,13 +51,14 @@ class CursosController extends Controller
         $curso_create->duracion = $data->duracion.' '.$data->duracion_unit;
         
         if($institucion->membresia == "premium"){
-            $url = $data->media;
+            $url = $data->video;
+            error_log($url);
                 if(strpos($url, 'youtube') == true)
                 {
                     $partes = explode("v=",$url);
                     $url = 'https://youtube.com/embed/'.$partes[1];
                 }
-            $curso_create->video = $data->$url;
+            $curso_create->video = $url;
         }
 
         $curso_create->save();

@@ -40,6 +40,9 @@ class CursoController extends Controller
 
         //Traigo los docentes encargados del curso
         $docentes = $curso->docentes;
+        $docentes->each(function($docentes){
+            $docentes->cursos = $docentes->cursos->take(4);
+        });
 
         //Tags
         $tags = $curso->tags;
@@ -53,6 +56,9 @@ class CursoController extends Controller
         //El temario
         $temario = $curso->temarios;
 
+        //Las imagenes
+        $imagenes = $curso->imagenes;
+
         $no_categorias = count($curso->categorias); //Cuento cuantas categorias tiene el curso MAX 3
 
         switch($no_categorias){ //Hacemos un switch para jalar y mostrar los relacionados
@@ -61,6 +67,14 @@ class CursoController extends Controller
                 $categoria_id = $categorias[0]->id; //Solo es una categoria, traemos el id
                 $categoria_object = Categoria::find($categoria_id); //Traemos todo el objeto
                 $cursos_relacionados = $categoria_object->cursos->reverse()->take(4); //Tomamos 4 cursos
+
+                foreach($cursos_relacionados as $key => $r)
+                {
+                    if($curso->id == $r->id)
+                    {
+                        unset($cursos_relacionados[$key]);
+                    }
+                }
             break;
 
             case 2:
@@ -125,7 +139,7 @@ class CursoController extends Controller
         return view('publicviews.cursos_detail')->with(['curso'=>$curso,
         'categorias'=>$categorias,'docentes'=>$docentes,
         'comentarios'=>$comentarios,'tags'=>$tags,'ventajas'=>$ventajas,'temario'=>$temario,
-        'institucion'=>$institucion,'relacionados'=>$cursos_relacionados]);
+        'institucion'=>$institucion,'relacionados'=>$cursos_relacionados, 'imagenes'=>$imagenes]);
     }
 
     //Funcion para llenar arreglo auxiliar

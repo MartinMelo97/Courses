@@ -88,7 +88,7 @@
         @if($institucion_owner->membresia == "gratuita")
             <div>
                 {!! Form::label('imagen','Sube una imagen de tu curso') !!}
-                {!! Form::file('imagen') !!}
+                {!! Form::file('imagen[]') !!}
             </div>
         @else
             <div>
