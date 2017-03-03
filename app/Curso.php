@@ -34,12 +34,12 @@ class Curso extends Model
        return $this->hasMany('App\Temario');
    }
    
-    public function categorias(){
-        return $this->belongsToMany('App\Categoria')->withTimestamps();
+    public function categoria(){
+        return $this->belongsTo('App\Categoria');
     }
 
-    public function categorias_slugs(){
-        return $this->belongsToMany('App\Categoria')->withTimestamps();
+    public function subcategoria(){
+        return $this->belongsTo('App\Subcategoria');
     }
 
     public function alumnos(){

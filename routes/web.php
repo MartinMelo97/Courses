@@ -99,6 +99,12 @@ Route::group(['prefix' => 'admin'], function() {
             'uses'=>'AdminControllers\CategoriasController@destroy',
             'as'=>'categorias.destroy'
         ]);
+
+        Route::resource('subcategorias', 'AdminControllers\SubcategoriasController');
+        Route::get('subcategorias/{id}/destroy', [
+            'uses'=>'AdminControllers\SubcategoriasController@destroy',
+            'as'=>'subcategorias.destroy'
+        ]);
         
         Route::resource('instituciones', 'AdminControllers\InstitucionesController',['except'=>'show']);
         Route::get('instituciones/{id}/destroy',[

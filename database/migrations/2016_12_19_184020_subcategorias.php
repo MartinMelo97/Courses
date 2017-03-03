@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CategoriaCurso extends Migration
+class Subcategorias extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,16 @@ class CategoriaCurso extends Migration
      */
     public function up()
     {
-        Schema::create('categoria_curso', function (Blueprint $table) {
+        
+        Schema::create('subcategorias', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('nombre');
             $table->integer('categoria_id')->unsigned();
             $table->foreign('categoria_id')->references('id')->on('categorias')->onDelete('cascade');
-            $table->integer('curso_id')->unsigned();
-            $table->foreign('curso_id')->references('id')->on('cursos')->onDelete('cascade');
-            $table->integer('porcentaje')->default(0);
+            $table->string('slug')->nullable();
             $table->timestamps();
-            //
         });
+        
     }
 
     /**
@@ -33,7 +33,7 @@ class CategoriaCurso extends Migration
     public function down()
     {
         
-        Schema::drop('categoria_curso');
+        Schema::drop('subcategorias');
         
     }
 }

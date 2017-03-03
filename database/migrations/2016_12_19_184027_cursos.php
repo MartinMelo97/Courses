@@ -27,6 +27,10 @@ class Cursos extends Migration
             $table->integer('visitas')->default(0);
             $table->integer('clicks')->default(0);
             $table->string('video')->nullable();
+            $table->integer('categoria_id')->unsigned();
+            $table->foreign('categoria_id')->references('id')->on('categorias')->onDelete('cascade');
+            $table->integer('subcategoria_id')->unsigned();
+            $table->foreign('subcategoria_id')->references('id')->on('subcategorias')->onDelete('cascade');
             $table->integer('institucion_id')->unsigned();
             $table->foreign('institucion_id')->references('id')->on('instituciones')->onDelete('cascade');
             $table->string('slug')->nullable();
