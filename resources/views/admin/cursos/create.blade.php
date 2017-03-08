@@ -36,8 +36,12 @@
         </div>
 
         <div>
-            {!! Form::label('categorias','Selecciona 3 categorias como máximo')!!}
-            {!! Form::select('categorias[]',$categorias,null,['class'=>'','required','multiple'])!!}
+            {!! Form::label('categoria','Selecciona tu categoria')!!}
+            {!! Form::select('categoria',$categorias,null,['class'=>'','required','placeholder'=>'Selecciona una categoria'])!!}
+        </div>
+        <div>
+            {!! Form::label('subcategoria','Selecciona tu subcategoria')!!}
+            {!! Form::select('subcategoria',[],null,['class'=>'','required','placeholder'=>'Selecciona una subcategoria'])!!}
         </div>
 
         <div>
@@ -140,8 +144,8 @@
 
         @endif
 
-        <!-- Si la membresia no es gratuita, puede añadir el temario del curso -->
-        @if($institucion_owner->membresia != "gratuita")
+        <!-- Si la membresia es premium, puede añadir el temario del curso -->
+        @if($institucion_owner->membresia == "premium")
 
             <div>
                 {!! Form::label('temario','Añade el temario de tu curso') !!}
@@ -256,6 +260,21 @@
                 }
             });
         });
+
+            //AJAX para cargar las subcategoría dependiendo de la categoria seleccionada
+            $('#categoria').on('change',function(){
+                var categoria_selected = $('#categoria').val();
+                console.log(categoria_selected);
+                $.post("{{route('cursos.categorias_ajax')}}" ,{
+                    id: categoria_selected
+                },
+                function(data){
+                    if(data['status'] == "OK"){
+                        console.log(data["status"]);
+                    }
+                }
+                );
+            });
 
     </script>
 

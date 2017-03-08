@@ -126,6 +126,10 @@ Route::group(['prefix' => 'admin'], function() {
         'uses'=>'AdminControllers\TagsController@destroy',
         'as'=>'tags.destroy'
         ]);
+        Route::post('cursos/categoriaselected',[
+            'uses'=>'AdminControllers\CursosController@ajax_subcategories',
+            'as'=>'cursos.categorias_ajax'
+        ]);
 
     });
 });

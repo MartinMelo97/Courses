@@ -14,6 +14,7 @@ use App\Temario;
 use App\Categoria;
 use App\Tag;
 use App\Imagen;
+use App\Subcategoria;
 
 class CursosController extends Controller
 {
@@ -23,7 +24,9 @@ class CursosController extends Controller
             $cursos->institucion;
             $cursos->alumnos = count($cursos->alumnos);
             $cursos->tags;
-            $cursos->categorias;
+            //$cursos->categorias;
+            $cursos->categoria;
+            $cursos->subcategoria;
             $cursos->docentes;
         });
         return view('admin.cursos.list')->with('cursos',$cursos);
@@ -46,8 +49,12 @@ class CursosController extends Controller
     public function store(Request $data){
         $curso_create = new Curso();
         $institucion = Institucion::where('nombre',$data->institucion)->first();
+        $categoria = Categoria::where('nombre', $data->categoria)->first();
+        $subcategoria = Subcategoria::where('nombre', $data->subcategoria)->first();
         $curso_create->fill($data->all());
         $curso_create->institucion_id = $institucion->id;
+        $curso_create->categoria_id = $categoria->id;
+        $curso_create->subcategoria_id = $subcategoria->id;
         $curso_create->duracion = $data->duracion.' '.$data->duracion_unit;
         
         if($institucion->membresia == "premium"){
@@ -63,7 +70,7 @@ class CursosController extends Controller
 
         $curso_create->save();
         //Guardamos las categorias seleccionadas
-        $curso_create->categorias()->sync($data->categorias);
+        //$curso_create->categorias()->sync($data->categorias);
 
         //Guardamos los profesores seleccionamos
         if($data->docentes){
@@ -146,14 +153,14 @@ class CursosController extends Controller
     }
 
     public function edit($slug){
-        $categorias_in_course = [];
+        //$categorias_in_course = [];
         $docentes_in_course = [];
         $curso = Curso::where('slug',$slug)->first();
-        foreach($curso->categorias as $categoria)
+        /*foreach($curso->categorias as $categoria)
         {
             error_log('entre, '.$categoria->id);
             $categorias_in_course[] = $categoria->id;
-        }
+        }*/
 
         foreach($curso->docentes as $docente)
         {
@@ -166,49 +173,40 @@ class CursosController extends Controller
         $instituciones = Institucion::orderBy('nombre','DESC')->pluck('nombre','id');
         $duracion_array = explode(" ", $curso->duracion);
         return view('admin.cursos.edit')->with(['curso'=>$curso,'duracion'=>$duracion_array,'categorias'=>$categorias,
-        'docentes'=>$docentes,'categorias_curso'=>$categorias_in_course,'docentes_curso'=>$docentes_in_course,
+        'docentes'=>$docentes,/*'categorias_curso'=>$categorias_in_course,*/'docentes_curso'=>$docentes_in_course,
         'instituciones'=>$instituciones]);
     }
 
     public function update(Request $data, $slug){
         $curso_edit = Curso::where('slug',$slug)->first();
         $curso_edit->fill($data->all());
-        $institucion = Institucion::find($data->institucion);
-        $curso_edit->institucion_id = $data->institucion;
+        $institucion = Institucion::where('nombre',$data->institucion)->first();
+        $categoria = Categoria::where('nombre', $data->categoria)->first();
+        $subcategoria = Subcategoria::where('nombre', $data->subcategoria)->first();
+        $curso_create->fill($data->all());
+        $curso_create->institucion_id = $institucion->id;
+        $curso_create->categoria_id = $categoria->id;
+        $curso_create->subcategoria_id = $subcategoria->id;
         $curso_edit->duracion = $data->duracion.' '.$data->duracion_unit;
 
-        if($institucion->membresia != "premium")
+        if($institucion->membresia == "premium")
         {
-            if($data->media)
-            {
-                $file = $data->file('media');
-                $nombre = 'Curso_'.$data->nombre.'.'.$file->getClientOriginalExtension();
-                $path = public_path().'/images/cursos/';
-                $file->move($path,$nombre);
-                $route = '/images/cursos/'.$nombre;
-                $curso_edit->media = $route;
-            }
-        }
-
-        else
-        {   
-            if($data->media)
-            {
-                $url = $data->media;
+           $url = $data->video;
+            error_log($url);
                 if(strpos($url, 'youtube') == true)
                 {
                     $partes = explode("v=",$url);
                     $url = 'https://youtube.com/embed/'.$partes[1];
                 }
-                $curso_edit->media = $url;
-            }
+            $curso_edit->video = $url;
         }
+
         $curso_edit->save();
 
 ////////////////////////////////Categorias////////////////////
 
-        $curso_edit->categorias()->detach();
-        $curso_edit->categorias()->sync($data->categorias);
+        /*$curso_edit->categorias()->detach();
+        $curso_edit->categorias()->sync($data->categorias);*/
 
 //////////////////////////Docentes/////////////////////////////
 
@@ -302,6 +300,9 @@ class CursosController extends Controller
             }
         }
 
+        /////////////////////Imagenes/////////////////////////
+        
+
         //////////////////Redireccion//////////////////////////
         return redirect()->route('cursos.index');
     }
@@ -311,5 +312,11 @@ class CursosController extends Controller
         $curso_delete->delete();
 
         return redirect()->route('cursos.index');
+    }
+    
+    public function ajax_subcategories(Request $request)
+    {
+        error_log("Hola");
+        error_log($request);
     }
 }
