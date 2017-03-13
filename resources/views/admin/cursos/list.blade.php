@@ -5,8 +5,8 @@
         <thead style="border: 1px solid black">
             <th>Nombre</th>
             <th>Institución</th>
-            <th>Categoria(s)</th>
-            <th>Tag(s)</th>
+            <th>Categoria</th>
+            <th>Subategoria</th>
             <th>Docente(s)</th>
             <th>No. Alumnos</th>
             <th>Opciones</th>
@@ -18,17 +18,8 @@
 
                     <td>{{$curso->institucion->nombre}}</td>
 
-                    <td>
-                        @foreach($curso->categorias as $categoria)
-                            <span>{{$categoria->nombre}}, </span>
-                        @endforeach
-                    </td>
-
-                    <td>
-                        @foreach($curso->tags as $tag)
-                            <span>{{$tag->nombre}}, </span>
-                        @endforeach
-                    </td>
+                    <td>{{$curso->categoria->nombre}}</td>
+                    <td>{{$curso->subcategoria->nombre}}</td>
 
                     <td>
                         @foreach($curso->docentes as $docente)

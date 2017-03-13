@@ -49,8 +49,10 @@ class CursosController extends Controller
     public function store(Request $data){
         $curso_create = new Curso();
         $institucion = Institucion::where('nombre',$data->institucion)->first();
-        $categoria = Categoria::where('nombre', $data->categoria)->first();
-        $subcategoria = Subcategoria::where('nombre', $data->subcategoria)->first();
+        //$categoria = Categoria::where('nombre', $data->categoria)->first();
+        //$subcategoria = Subcategoria::where('nombre', $data->subcategoria)->first();
+        $categoria = Categoria::find($data->categoria);
+        $subcategoria = Categoria::find($data->subcategoria);
         $curso_create->fill($data->all());
         $curso_create->institucion_id = $institucion->id;
         $curso_create->categoria_id = $categoria->id;

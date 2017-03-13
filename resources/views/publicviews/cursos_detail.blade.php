@@ -39,12 +39,14 @@
     @endif
 
     <div class="datos_publicos">
+        <h3>Categoria: {{$categoria->nombre}}</h3>
+        <h3>Subategoria: {{$subcategoria->nombre}}</h3>
         <h4>DESCRIPCIÓN: {{$curso->descripcion}}</h4>
         <p>Lenguaje: {{$curso->lenguaje}}</p>
         <p>Nivel: {{$curso->nivel}}</p>
     </div>
 
-    @if($institucion->membresia != "gratuita")
+    @if($institucion->membresia != "gratuita" and count($ventajas) > 0)
         <h4>Ventajas laborales de tomar este curso</h4>
         <ul>
             @foreach($ventajas as $ventaja)
@@ -134,9 +136,22 @@
             <p>LOngitud: {{$curso->longitud}}</p>
         </div>
 
-        <h4>Cursos relacionados</h4>
-        @if(count($relacionados) > 0)
-            @foreach($relacionados as $curso_relacionado)
+        <h4>Cursos de la misma subcategoria</h4>
+        @if(count($relacionados_sub) > 0)
+            @foreach($relacionados_sub as $curso_relacionado)
+                @if($curso_relacionado->video == NULL)
+                <a href="{{route('cursos.detail',$curso_relacionado->slug)}}"><img src="{{$curso_relacionado->imagenes[0]->ruta}}" alt="" width="100px" height="100px"></a>
+                <p>Nombre: {{$curso_relacionado->nombre}}</p>
+                @else
+                <iframe width="100" height="100" src="{{$curso_relacionado->video}}" frameborder="0" allowfullscreen></iframe>
+                <a href="{{route('cursos.detail',$curso_relacionado->slug)}}"><p>Nombre: {{$curso_relacionado->nombre}}</p></a>
+                @endif
+            @endforeach
+        @endif
+
+        <h4>Cursos de la misma categoria</h4>
+        @if(count($relacionados_cat) > 0)
+            @foreach($relacionados_cat as $curso_relacionado)
                 @if($curso_relacionado->video == NULL)
                 <a href="{{route('cursos.detail',$curso_relacionado->slug)}}"><img src="{{$curso_relacionado->imagenes[0]->ruta}}" alt="" width="100px" height="100px"></a>
                 <p>Nombre: {{$curso_relacionado->nombre}}</p>

@@ -11,13 +11,10 @@
             <p>Inicia el: {{$curso->fecha_inicio}}</p>
             <a href="{{route ('instituciones.detail',$curso->institucion->slug)}}"><p>Institución: {{$curso->institucion->nombre}}</p></a>
             <p>Tipo de membresia: {{$curso->institucion->membresia}}</p>
-            <h3>Categorias:</h3>
-            <p>
-            @for($i = 0; $i < count($curso->categorias); $i++)
-                <a href="{{$curso->categorias_slugs[$i]}}"><span> {{$curso->categorias[$i]}} </span></a>
-            @endfor
-            </p>
-            <br>
+            <h4>Categoria:</h4>
+            <p>{{$curso->categoria->nombre}}</p>
+            <h4>Subategoria:</h4>
+            <p>{{$curso->subcategoria->nombre}}</p>
             <h3>Tags:</h3>
             <p>Tags: 
             @for($i = 0; $i < count($curso->tags); $i++)
