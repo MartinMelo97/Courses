@@ -265,12 +265,19 @@
             $('#categoria').on('change',function(){
                 var categoria_selected = $('#categoria').val();
                 console.log(categoria_selected);
-                $.post("{{route('cursos.categorias_ajax')}}" ,{
-                    id: categoria_selected
-                },
+                $.get("/admin/cursos/categoriaselected/" + categoria_selected,
                 function(data){
-                    if(data['status'] == "OK"){
-                        console.log(data["status"]);
+                    if(data.length > 0)
+                    {
+                    for(var i = 0; i < data.length; i++){
+                        $('#subcategoria').append(
+                            '<option value="'+data[i]['id']+'">'+data[i]['nombre']+'</option'
+                        );
+                    }
+                    }
+                    else
+                    {
+                        alert("No hay subcategorias de esta categoria");
                     }
                 }
                 );

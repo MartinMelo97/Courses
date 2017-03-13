@@ -314,9 +314,15 @@ class CursosController extends Controller
         return redirect()->route('cursos.index');
     }
     
-    public function ajax_subcategories(Request $request)
+    public function ajax_subcategories($id)
     {
-        error_log("Hola");
-        error_log($request);
+        if($id > 0)
+        {
+            $categoria = Categoria::find($id);
+            $subcategorias = $categoria->subcategorias;
+            $subcategorias->status = "yes";
+            return $subcategorias->toArray();
+        }
+
     }
 }
