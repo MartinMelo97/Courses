@@ -35,5 +35,11 @@
         integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
         crossorigin="anonymous"></script>
         @yield('scripts','')
+
+        <h1>Buscadooooooooooooooooooooooooooooooooooooooooooooooor</h1>
+    {!! Form::open(['method'=>'GET','route'=>'buscador', ]) !!}
+        {!! Form::text('buscador_txt',null,['class'=>'','require','placeholder'=>'Ingresa una palabra']) !!}
+        {!! Form::submit('Buscar!') !!}
+    {!! Form::close()!!}
     </body>
 </html>

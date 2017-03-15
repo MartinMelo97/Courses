@@ -17,4 +17,5 @@
             <a href="{{route ('categorias.detail',$categoria->slug)}}"><li>{{$categoria->nombre}}</li></a>
         @endforeach
     </ul>
+
 @endsection

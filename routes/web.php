@@ -47,6 +47,11 @@ Route::get('/alumnos/{usuario}',[
     'as'=>'alumnos.perfil'
 ]);    
 
+Route::get('/buscador', [
+    'uses'=>'BuscadorController@search',
+    'as'=>'buscador'
+]);
+
 //Rutas para recuperacion de contraseña
 Route::post('password/email', 'AlumnosAuth\ForgotPasswordController@sendResetLinkEmail');
 Route::get('password/reset', 'AlumnosAuth\ForgotPasswordController@showLinkRequestForm');
