@@ -47,7 +47,7 @@ Route::get('/alumnos/{usuario}',[
     'as'=>'alumnos.perfil'
 ]);    
 
-Route::get('/buscador', [
+Route::get('/search/', [
     'uses'=>'BuscadorController@search',
     'as'=>'buscador'
 ]);

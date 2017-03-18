@@ -38,7 +38,7 @@
 
         <h1>Buscadooooooooooooooooooooooooooooooooooooooooooooooor</h1>
     {!! Form::open(['method'=>'GET','route'=>'buscador', ]) !!}
-        {!! Form::text('buscador_txt',null,['class'=>'','require','placeholder'=>'Ingresa una palabra']) !!}
+        {!! Form::text('q',null,['class'=>'','require','placeholder'=>'Ingresa una palabra']) !!}
         {!! Form::submit('Buscar!') !!}
     {!! Form::close()!!}
     </body>

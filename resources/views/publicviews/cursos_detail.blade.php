@@ -138,6 +138,7 @@
 
         <h4>Cursos de la misma subcategoria</h4>
         @if(count($relacionados_sub) > 0)
+            <div style="display:inline;">
             @foreach($relacionados_sub as $curso_relacionado)
                 @if($curso_relacionado->video == NULL)
                 <a href="{{route('cursos.detail',$curso_relacionado->slug)}}"><img src="{{$curso_relacionado->imagenes[0]->ruta}}" alt="" width="100px" height="100px"></a>
@@ -147,11 +148,14 @@
                 <a href="{{route('cursos.detail',$curso_relacionado->slug)}}"><p>Nombre: {{$curso_relacionado->nombre}}</p></a>
                 @endif
             @endforeach
+            </div>
         @endif
 
         <h4>Cursos de la misma categoria</h4>
         @if(count($relacionados_cat) > 0)
+            <div style="inline">
             @foreach($relacionados_cat as $curso_relacionado)
+                <div style="display:inline">
                 @if($curso_relacionado->video == NULL)
                 <a href="{{route('cursos.detail',$curso_relacionado->slug)}}"><img src="{{$curso_relacionado->imagenes[0]->ruta}}" alt="" width="100px" height="100px"></a>
                 <p>Nombre: {{$curso_relacionado->nombre}}</p>
@@ -159,7 +163,9 @@
                 <iframe width="100" height="100" src="{{$curso_relacionado->video}}" frameborder="0" allowfullscreen></iframe>
                 <a href="{{route('cursos.detail',$curso_relacionado->slug)}}"><p>Nombre: {{$curso_relacionado->nombre}}</p></a>
                 @endif
+                </div>
             @endforeach
+            </div>
         @endif
     @endif
     
@@ -170,13 +176,15 @@
         @foreach($docentes as $docente)
             <hr>
             <h3>Otros cursos impartidos por {{$docente->nombre}} {{$docente->apellidos}}</h3>
-            @foreach($docente->cursos as $curso)
-                @if($curso->video == NULL)
-                <a href="{{route('cursos.detail',$curso->slug)}}"><img src="{{$curso->imagenes[0]->ruta}}" alt="" width="100px" height="100px"></a>
-                <p>Nombre: {{$curso->nombre}}</p>
-                @else
-                <iframe width="100" height="100" src="{{$curso->video}}" frameborder="0" allowfullscreen></iframe>
-                <a href="{{route('cursos.detail',$curso->slug)}}"><p>Nombre: {{$curso->nombre}}</p></a>
+            @foreach($docente->cursos as $cursoo)
+                @if($cursoo->id != $curso->id)
+                    @if($cursoo->video == NULL)
+                    <a href="{{route('cursos.detail',$cursoo->slug)}}"><img src="{{$cursoo->imagenes[0]->ruta}}" alt="" width="100px" height="100px"></a>
+                    <p>Nombre: {{$cursoo->nombre}}</p>
+                    @else
+                    <iframe width="100" height="100" src="{{$cursoo->video}}" frameborder="0" allowfullscreen></iframe>
+                    <a href="{{route('cursos.detail',$cursoo->slug)}}"><p>Nombre: {{$cursoo->nombre}}</p></a>
+                    @endif
                 @endif
             @endforeach
             <hr>
