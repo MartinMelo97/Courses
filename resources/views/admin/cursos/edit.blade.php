@@ -18,8 +18,17 @@
         </div>
 
         <div>
-            {!! Form::label('categorias','Categorias')!!}
-            {!! Form::select('categorias[]',$categorias, $categorias_curso,['class'=>'','required','multiple'])!!}
+            {!! Form::label('categoria','Selecciona tu categoria')!!}
+            {!! Form::select('categoria',$categorias,$curso->categoria->id,['class'=>'','required','placeholder'=>'Selecciona una categoria'])!!}
+        </div>
+        <div>
+            {!! Form::label('subcategoria','Selecciona tu subcategoria')!!}
+            {!! Form::select('subcategoria',$subcategorias,$curso->subcategoria->id,['class'=>'','required','placeholder'=>'Selecciona una subcategoria'])!!}
+        </div>
+
+        <div>
+            {!! Form::label('precio','Precio del curso (MXN)') !!}
+            {!! Form::number('precio',$curso->precio,['class'=>'','required']) !!}
         </div>
 
         <div>
@@ -32,6 +41,11 @@
         <div>
             {!! Form::label('fecha_inicio','Fecha de inicio') !!}
             {!! Form::text('fecha_inicio',$curso->fecha_inicio,['class'=>'','required']) !!}
+        </div>
+
+        <div>
+            {!! Form::label('estado','Estado donde se dará el curso') !!}
+            {!! Form::text('estado',$curso->estado,['class'=>'','required']) !!}
         </div>
 
         <div>
@@ -67,10 +81,10 @@
 
         <!-- Si si es premium, podrá mandar la URL de su video (Youtube de preferencia) -->
         @else
-            <iframe width="500" height="500" src="{{$curso->media}}" frameborder="0" allowfullscreen></iframe>
+            <iframe width="500" height="500" src="{{$curso->video}}" frameborder="0" allowfullscreen></iframe>
             <div>
-                {!! Form::label('media','Actualizar curso') !!}
-                {!! Form::text('media', null,['class'=>'','placeholder'=>'https://...com']) !!}
+                {!! Form::label('video','Actualizar curso') !!}
+                {!! Form::text('video', null,['class'=>'','placeholder'=>'https://...com']) !!}
             </div>
 
         @endif<!-- Termina if de membresia -->
@@ -217,6 +231,30 @@
                 }
             });
         });
+
+        //AJAX para cargar las subcategoría dependiendo de la categoria seleccionada
+            $('#categoria').on('change',function(){
+                var categoria_selected = $('#categoria').val();
+                console.log(categoria_selected);
+                $.get("/admin/cursos/categoriaselected/" + categoria_selected,
+                function(data){
+                    $('#subcategoria').html('');
+                    if(data.length > 0)
+                    {
+                    for(var i = 0; i < data.length; i++){
+                        $('#subcategoria').append(
+                            '<option value="'+data[i]['id']+'">'+data[i]['nombre']+'</option'
+                        );
+                        console.log(data[i]['id']);
+                    }
+                    }
+                    else
+                    {
+                        alert("No hay subcategorias de esta categoria");
+                    }
+                }
+                );
+            });
 
     </script>
 

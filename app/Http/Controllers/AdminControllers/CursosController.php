@@ -49,10 +49,9 @@ class CursosController extends Controller
     public function store(Request $data){
         $curso_create = new Curso();
         $institucion = Institucion::where('nombre',$data->institucion)->first();
-        //$categoria = Categoria::where('nombre', $data->categoria)->first();
-        //$subcategoria = Subcategoria::where('nombre', $data->subcategoria)->first();
+        error_log($data->subcategoria);
         $categoria = Categoria::find($data->categoria);
-        $subcategoria = Categoria::find($data->subcategoria);
+        $subcategoria = Subcategoria::find($data->subcategoria);
         $curso_create->fill($data->all());
         $curso_create->institucion_id = $institucion->id;
         $curso_create->categoria_id = $categoria->id;
@@ -155,15 +154,10 @@ class CursosController extends Controller
     }
 
     public function edit($slug){
-        //$categorias_in_course = [];
         $docentes_in_course = [];
         $curso = Curso::where('slug',$slug)->first();
-        /*foreach($curso->categorias as $categoria)
-        {
-            error_log('entre, '.$categoria->id);
-            $categorias_in_course[] = $categoria->id;
-        }*/
-
+        $id = $curso->categoria->id;
+        $subcategorias = Subcategoria::where('categoria_id',$id)->pluck('nombre','id');
         foreach($curso->docentes as $docente)
         {
             error_log('entre doc, '.$docente->id);
@@ -175,20 +169,19 @@ class CursosController extends Controller
         $instituciones = Institucion::orderBy('nombre','DESC')->pluck('nombre','id');
         $duracion_array = explode(" ", $curso->duracion);
         return view('admin.cursos.edit')->with(['curso'=>$curso,'duracion'=>$duracion_array,'categorias'=>$categorias,
-        'docentes'=>$docentes,/*'categorias_curso'=>$categorias_in_course,*/'docentes_curso'=>$docentes_in_course,
-        'instituciones'=>$instituciones]);
+        'docentes'=>$docentes,'docentes_curso'=>$docentes_in_course,
+        'instituciones'=>$instituciones,'subcategorias'=>$subcategorias]);
     }
 
     public function update(Request $data, $slug){
         $curso_edit = Curso::where('slug',$slug)->first();
+        $institucion = Institucion::find($data->institucion);
+        $categoria = Categoria::find($data->categoria);
+        $subcategoria = Subcategoria::find($data->subcategoria);
         $curso_edit->fill($data->all());
-        $institucion = Institucion::where('nombre',$data->institucion)->first();
-        $categoria = Categoria::where('nombre', $data->categoria)->first();
-        $subcategoria = Subcategoria::where('nombre', $data->subcategoria)->first();
-        $curso_create->fill($data->all());
-        $curso_create->institucion_id = $institucion->id;
-        $curso_create->categoria_id = $categoria->id;
-        $curso_create->subcategoria_id = $subcategoria->id;
+        $curso_edit->institucion_id = $institucion->id;
+        $curso_edit->categoria_id = $categoria->id;
+        $curso_edit->subcategoria_id = $subcategoria->id;
         $curso_edit->duracion = $data->duracion.' '.$data->duracion_unit;
 
         if($institucion->membresia == "premium")

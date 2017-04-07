@@ -45,6 +45,11 @@
         </div>
 
         <div>
+            {!! Form::label('precio','Precio del curso (MXN)') !!}
+            {!! Form::number('precio',null,['class'=>'','required']) !!}
+        </div>
+
+        <div>
             {!! Form::label('duracion','Duración del curso')!!}
             {!! Form::number('duracion',null,['class'=>'','required']) !!}
             {!! Form::select('duracion_unit',['horas'=>'horas','dias'=>'días','semanas'=>'semanas'],null,
@@ -55,7 +60,11 @@
             {!! Form::label('fecha_inicio','Fecha de inicio') !!}
             {!! Form::text('fecha_inicio',null,['class'=>'','placeholder'=>'YYYY-MM-DD','required']) !!}
         </div>
-
+        
+        <div>
+            {!! Form::label('estado','Estado donde se dará el curso') !!}
+            {!! Form::text('estado','',['class'=>'','required']) !!}
+        </div>
         <div>
             {!! Form::label('lenguaje','Idioma del curso') !!}
             {!! Form::select('lenguaje',['español'=>'Español','ingles'=>'Inglés'] ,null,['class'=>'','required']) !!}
@@ -273,6 +282,7 @@
                         $('#subcategoria').append(
                             '<option value="'+data[i]['id']+'">'+data[i]['nombre']+'</option'
                         );
+                        console.log(data[i]['id']);
                     }
                     }
                     else

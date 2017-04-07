@@ -12,7 +12,7 @@ class Curso extends Model
     use Sluggable;
 
     protected $table = 'cursos';
-    protected $fillable = ['nombre','duracion','fecha_inicio','lenguaje','nivel','descripcion','bloqueo','calificacion','video','slug'];
+    protected $fillable = ['nombre','duracion','fecha_inicio','lenguaje','estado','precio','nivel','descripcion','bloqueo','calificacion','video','slug'];
 
     public function docentes(){
         return $this->belongsToMany('App\Docente')->withTimestamps();
@@ -64,6 +64,17 @@ class Curso extends Model
                 'source' => 'nombre'
             ]
         ];
+    }
+
+    public function getCounterOrderAttribute(){
+        return ($this->calificacion*2) + $this->visitas + $this->clicks + count($this->alumnos);
+    }
+
+    public function scopeSearching($query, $word)
+    {
+        error_log("QUe pedo");   
+        $query->where('nombre', 'LIKE', '%'.$word.'%')
+        ->orWhere('descripcion', 'LIKE', '%'.$word.'%');
     }
 }
 

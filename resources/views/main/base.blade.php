@@ -29,17 +29,36 @@
                 @endif
             </ul>
         </nav>
+        <h1>Buscadooooooooooooooooooooooooooooooooooooooooooooooor</h1>
+        {!! Form::open(['method'=>'GET','route'=>'buscador', ]) !!}
+        {!! Form::text('q',null,['class'=>'','require','placeholder'=>'Ingresa una palabra']) !!}
+        <button type="button" id="busqueda_avanzada">Busqueda avanzada</button>
+        <div id="avanzada" style="display:none;">
+            {!! Form::label('min_precio','Precio mínimo') !!}
+            {!! Form::number('min_precio', null,['class'=>'']) !!}
+            {!! Form::label('max_precio','Precio máximo') !!}
+            {!! Form::number('max_precio', null,['class'=>'']) !!}
+            <br>
+            {!! Form::label("ubicacion", "Selecciona Estado") !!}
+            {!! Form::select('ubicacion', ['Puebla'=>'Puebla'])!!}
+        </div>
+        {!! Form::submit('Buscar!') !!}
+        {!! Form::close()!!}
+
         @yield('content','')
         <script
         src="https://code.jquery.com/jquery-3.1.1.js"
         integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
         crossorigin="anonymous"></script>
+
+
+        <script>
+            $('#busqueda_avanzada').on('click', function(){
+                $(this).fadeOut();
+                $('#avanzada').fadeIn();
+            });
+        </script>
         @yield('scripts','')
 
-        <h1>Buscadooooooooooooooooooooooooooooooooooooooooooooooor</h1>
-    {!! Form::open(['method'=>'GET','route'=>'buscador', ]) !!}
-        {!! Form::text('q',null,['class'=>'','require','placeholder'=>'Ingresa una palabra']) !!}
-        {!! Form::submit('Buscar!') !!}
-    {!! Form::close()!!}
     </body>
 </html>
