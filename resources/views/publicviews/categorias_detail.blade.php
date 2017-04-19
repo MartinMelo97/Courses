@@ -10,7 +10,7 @@
         <p>Fecha de Inicio: {{$curso->fecha_inicio}}</p>
         <br><hr><br>
         @if($cursos->institucion->membresia == "premium")
-            h3
+            <h3 style="red">recomendado</h3>
         @endif
         
     @endforeach
