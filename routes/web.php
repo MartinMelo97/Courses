@@ -284,3 +284,10 @@ Route::group(['prefix'=>'docentes'], function(){
     });
 });
 
+//Ejemplo de ruta
+//Route::get('/hola',[
+  //  'uses'=>'BuscadorController@hola',
+   // 'as'=>'buscador.hola'
+//]);
+
+

@@ -148,4 +148,8 @@ class BuscadorController extends Controller
         return $ordenados;
     }
 
+    public function hola(){
+        return view('hola.hola');
+    }
+
 }

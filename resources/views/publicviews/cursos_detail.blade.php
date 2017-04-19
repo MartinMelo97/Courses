@@ -293,6 +293,7 @@
                     }
                     else
                     {
+                        console.log("data")
                         alert("Algo fallo, intentalo mas tarde");
                     }
                 });

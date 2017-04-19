@@ -107,7 +107,10 @@ class CursoController extends Controller
         error_log($curso->nombre);
         $alumno = Alumno::find($data->user_id);
         error_log($alumno->nombre);
+        error_log(count($curso->alumnos));
         $alumnos_yaregistrados = $curso->alumnos;
+        if(count($alumnos_yaregistrados) > 0)
+        {
         foreach($alumnos_yaregistrados as $registrado)
         {
             if($registrado->id == $alumno->id)
@@ -116,9 +119,16 @@ class CursoController extends Controller
             }
             else
             {
+                error_log("Entro");
                 $curso->alumnos()->attach($alumno);
                 return response()->json(array('status'=>"OK"));
             }
+        }
+        }
+        else
+        {
+            $curso->alumnos()->attach($alumno);
+            return response()->json(array('status'=>"OK"));
         }
         
     }
