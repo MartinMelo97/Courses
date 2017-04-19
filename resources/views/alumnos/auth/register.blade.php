@@ -92,7 +92,7 @@
                         </div>
 
                         <div class="{{ $errors->has('pais') ? ' has-error' : '' }}">
-                            <label for="pais">País de oigen</label>
+                            <label for="pais">País de origen</label>
 
                             <div>
                                 <input id="pais" type="text" name="pais" value="{{ old('pais') }}" required>

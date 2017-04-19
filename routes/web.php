@@ -180,6 +180,11 @@ Route::group(['prefix' => 'cursos'],function(){
         'as'=>'cursos.membresia'
     ]);
 
+    Route::post('/curso_added',[
+        'uses'=>'CursoController@added',
+        'as'=>'cursos.added'
+    ]);
+
 });
 
 //Rutas de categorias

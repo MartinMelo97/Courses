@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Curso;
 use App\Alumno;
 use App\Institucion;
@@ -72,7 +73,7 @@ class CursoController extends Controller
         $comentarios->each(function ($comentarios){
             $comentarios->alumno_id = Alumno::find($comentarios->alumno_id);
         });
-
+        error_log($curso->video);
         return view('publicviews.cursos_detail')->with(['curso'=>$curso,
         'categoria'=>$categoria,'subcategoria'=>$subcategoria,'docentes'=>$docentes,
         'comentarios'=>$comentarios,'tags'=>$tags,'ventajas'=>$ventajas,'temario'=>$temario,
@@ -97,6 +98,27 @@ class CursoController extends Controller
             }
         }
         return $filtrado;
+    }
+
+    public function added(Request $data){
+        $curso = Curso::find($data->curso_id);
+        error_log($curso->nombre);
+        $alumno = Alumno::find($data->user_id);
+        error_log($alumno->nombre);
+        $alumnos_yaregistrados = $curso->alumnos;
+        foreach($alumnos_yaregistrados as $registrado)
+        {
+            if($registrado->id == $alumno->id)
+            {
+                return response()->json(array('status'=>'ya'));
+            }
+            else
+            {
+                $curso->alumnos()->attach($alumno);
+                return response()->json(array('status'=>"OK"));
+            }
+        }
+        
     }
 }
 

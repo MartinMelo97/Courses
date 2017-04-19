@@ -11,16 +11,16 @@
             display: none;
         }
     </style>
-
+    
     @if($institucion->membresia != "premium")
         <div>
             <img src="{{$imagenes[0]->ruta}}" alt="">
             @if($institucion->membresia == "gratuita")
-                <h3>{{$curso->nombre}} | Institución: {{$curso->institucion->nombre}}</h3>
+                <h3 id="curso_name" data-id="{{$curso->id}}">{{$curso->nombre}} | Institución: {{$curso->institucion->nombre}}</h3>
             @else
-                <h3>{{$curso->nombre}}</h3>
+                <h3 id="curso_name" data-id="{{$curso->id}}">{{$curso->nombre}}</h3>
             @endif
-            @if(count($imagenes) > 0)
+            @if(count($imagenes) > 0)   
                 @for($i = 1; $i < count($imagenes); $i++)
                     <img src="{{$imagenes[$i]->ruta}}" alt="" style="width:100px; height: 100px; display:inline;">
                 @endfor
@@ -29,7 +29,7 @@
     @else
         <div>
             <iframe width="500" height="500" src="{{$curso->video}}" frameborder="0" allowfullscreen></iframe>
-            <h3>{{$curso->nombre}}</h3>
+            <h3 id="curso_name" data-id="{{$curso->id}}">{{$curso->nombre}}</h3>
             @if(count($imagenes) > 0)
                 @for($i = 0; $i < count($imagenes); $i++)
                     <img src="{{$imagenes[$i]->ruta}}" alt="" style="width:100px; height: 100px; display:inline;">
@@ -82,11 +82,18 @@
     <!--Si el bloqueo es por media, muestro boton para compartir-->
     @elseif($curso->bloqueo == "social")
         <div class="bloqueo">
-            <button id="bloqueo_social" style="color:blue; display:none;" type="button" class="ver_contenido">
+            <button id="bloqueo_social" style="color:blue; display:none;" type="button" >
             Comparte nuestra página con tus amigos!</button>
         </div>
     <!--Si el bloqueo es con login, hago que inicie sesión aquí mismo-->    
     @elseif($curso->bloqueo== "login")
+        
+        @if(\Auth::guard('alumnos')->user())
+            <div id="bloqueo_login_confirm" style="display:none" class="bloqueo">
+                <input type="hidden" id="_token" name="_token" value="{!! csrf_token() !!}">
+                <button id="course_registration">Confirma tu interes por más información</button>
+            </div>
+        @else
         <div id="bloqueo_login" style="display:none" class="bloqueo">
         <h3>Inicia sesión para ver la información completa de este curso</h3>
         <form action="{{route('alumnos.login')}}" method="POST">
@@ -96,6 +103,7 @@
         </form>
         <p>No tienes cuenta? <a href="{{route('alumnos.registro')}}">Crea una aquí</a></p>
         </div>
+        @endif
     @endif
 
 
@@ -203,6 +211,26 @@
         src="https://code.jquery.com/jquery-3.1.1.js"
         integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
         crossorigin="anonymous"></script>
+    
+    <script>
+    window.fbAsyncInit = function() {
+        FB.init({
+        appId      : '1906769682877351',
+        xfbml      : true,
+        version    : 'v2.8'
+        });
+        FB.AppEvents.logPageView();
+    };
+
+    (function(d, s, id){
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+    </script>
+
     <script>
         $('#correo').click(function(){
             $('#bloqueo_correo').css({'display':'block'});
@@ -214,14 +242,60 @@
             $(this).css({'display':'none'});
         });
 
+        $('#bloqueo_social').click(function(){
+            FB.ui({
+                method: 'share',
+                href: 'https://developers.facebook.com/docs/',
+                display: 'popup',
+                quote: 'He visto un curso en cursigue!'
+                }, function(response){
+                    if(response instanceof Array && response != 'undefined')
+                    {
+                        //alert("Verga");
+                        $('.bloqueo').css({'display':'none'});
+                        $('.datos_ocultos').css({'display':'block','background-color':'red'});
+                    }
+                    else
+                    {
+                        alert("Nel prro");
+                    }
+                });
+        });
+
         $('#login').click(function(){
             $('#bloqueo_login').css({'display':'block'});
+            $('#bloqueo_login_confirm').css({'display':'block'});
             $(this).css({'display':'none'});
         });
 
         $('.ver_contenido').click(function(){
             $('.bloqueo').css({'display':'none'});
             $('.datos_ocultos').css({'display':'block','background-color':'red'});
+        });
+        
+
+        $('#course_registration').click(function(){
+            var user_id = $('.user_logged_name').data('id');
+            var curso_id = $('#curso_name').data('id');
+            $.post("/cursos/curso_added", {
+                user_id: user_id,
+                curso_id: curso_id,
+                _token: $('#_token').val()},
+                function(data)
+                {
+                    if(data['status']== "OK")
+                    {
+                        alert("Ya te envie la info papu");
+                    }
+                    else if (data['status'] == 'ya')
+                    {
+                        alert("Ya estas inscrito, pendejo");
+                    }
+                    else
+                    {
+                        alert("Algo fallo, intentalo mas tarde");
+                    }
+                });
         });
 
 

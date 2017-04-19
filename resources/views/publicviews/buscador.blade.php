@@ -55,7 +55,7 @@
     <h2>Cursos encontrados</h2>
     @if(count($cursos)>0)
         @foreach($cursos as $curso)
-            <hr>
+           <hr>
                 <a href="{{route ('cursos.detail', $curso->slug)}}"><div style="background:white;">
                 <p>Nombre: {{$curso->nombre}}</p>
                 <p>Inicia el: {{$curso->fecha_inicio}}</p>
@@ -71,6 +71,9 @@
                     <a href="{{$curso->tags_slugs[$i]}}"><span> {{$curso->tags[$i]->nombre}}, </span></a>
                 @endfor
                 </p>
+                @if($curso->institucion->membresia == "premium")
+                    <h3 style="color:red;">Recomendado</h3>
+                @endif
             </div></a>
         @endforeach
     @else
