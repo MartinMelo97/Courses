@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Categoria;
 use App\Curso;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 class CategoriasController extends Controller
 {
     public function list(){
@@ -18,7 +20,14 @@ class CategoriasController extends Controller
         $cursos = Categoria::where('slug',$slug)->first()->cursos()->orderBy('created_at','DESC')->paginate(5);
         //$cursos = $categoria->cursos;
         $cursos = $this->ordenador($cursos,[]);
-        return view ('publicviews.categorias_detail')->with(['cursos'=>$cursos,'categoria'=>$categoria]);
+        //$cursos->paginate(5);
+
+        $current = LengthAwarePaginator::resolveCurrentPage();
+        $collection = new Collection($cursos);
+        $perPage = 5;
+        $currentPageSearchResults = $collection->slice(($current - 1) * $perPage, $perPage)->all();
+        $entries = new LengthAwarepaginator($currentPageSearchResults, count($collection), $perPage);
+        return view ('publicviews.categorias_detail')->with(['cursos'=>$cursos,'categoria'=>$categoria,'entries'=>$entries]);
     }
 
     public function ordenador($cursos, $encontrados)
