@@ -12,6 +12,7 @@ use App\Institucion;
 use App\Docente;
 use App\Alumno;
 
+
 class BuscadorController extends Controller
 {
     public function search()

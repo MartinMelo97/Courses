@@ -9,6 +9,9 @@
         <h5>Institucion: <a href="{{route ('instituciones.detail',$curso->institucion->slug)}}">{{$curso->institucion->nombre}}</a></h5>
         <p>Fecha de Inicio: {{$curso->fecha_inicio}}</p>
         <br><hr><br>
-        {!! $cursos->render() !!}
+        @if($cursos->institucion->membresia == "premium")
+            h3
+        @endif
+        
     @endforeach
 @endsection
